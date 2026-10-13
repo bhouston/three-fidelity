@@ -7,11 +7,27 @@ import { defineConfig, normalizePath } from 'vite';
 const stockRequire = createRequire(new URL('../renderers/package.json', import.meta.url));
 // Vite module ids use forward slashes on every platform, including Windows.
 const stockRoot = normalizePath(dirname(dirname(stockRequire.resolve('three-r186'))));
+const devRoot = normalizePath(fileURLToPath(new URL('../../submodules/three-dev/', import.meta.url))).replace(
+  /\/$/,
+  '',
+);
 
 const source = (name: string) => fileURLToPath(new URL(`../${name}/src/index.ts`, import.meta.url));
 export default defineConfig({
   base: './',
   plugins: [
+    {
+      name: 'dev-three-self-imports',
+      enforce: 'pre',
+      resolveId(id) {
+        if (id !== 'three-dev' && !id.startsWith('three-dev/')) return;
+        return normalizePath(id === 'three-dev' ? join(devRoot, 'build/three.module.js') : stockRequire.resolve(id));
+      },
+      transform(code, id) {
+        if (!id.startsWith(devRoot + '/')) return;
+        return code.replace(/(from\s*['"])three(?=\/|['"])/g, '$1three-dev');
+      },
+    },
     {
       name: 'stock-three-self-imports',
       enforce: 'pre',
@@ -62,7 +78,7 @@ export default defineConfig({
     },
   },
   // Keep one TSL stack per Three.js version; prebundling can embed additional runtime copies.
-  optimizeDeps: { exclude: ['three', 'three-r186', 'three-mesh-bvh', 'three-gpu-pathtracer'] },
+  optimizeDeps: { exclude: ['three', 'three-r186', 'three-dev', 'three-mesh-bvh', 'three-gpu-pathtracer'] },
   publicDir: fileURLToPath(new URL('../../submodules/three.js/examples/', import.meta.url)),
   server: {
     host: '127.0.0.1',

@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2024",
+    "paths": {
+      "three-dev/webgpu": ["./packages/renderers/node_modules/@types/three/build/three.webgpu.d.ts"],
+      "three-dev/tsl": ["./packages/renderers/node_modules/@types/three/build/three.tsl.d.ts"],
+      "three-dev/addons/*": ["./packages/renderers/node_modules/@types/three/examples/jsm/*"]
+    },
     "lib": ["ES2024"],
     "strict": true,
     "allowJs": false,
