@@ -56,3 +56,20 @@ PSNR in dB against the existing three-gpu-pathtracer reference (higher is closer
 Baking is a diffuse-lighting approximation, with different noise and occlusion behavior from live GI/AO. Cornell retains visible irradiance bands with the upstream sampler. A hardware atlas check using a known world-position/normal field passes on transformed geometry; constant irradiance produces a uniform atlas. Dogwood reports upstream Float32 UV precision limits and possible chart overlap. These results are retained for comparison. Camera motion preserves the finished bake; geometry or lighting changes require recreating the renderer.
 
 Validation: build, typecheck, lint (warnings only), formatting, all 320 tests with coverage (four workers, 30-second timeout), hardware integration on the four representative scenes, and comparison-site build passed. The unchanged dependency graph has seven audit advisories (two critical, four high, one moderate).
+
+## Baked representative benchmarks — October 13, 2026
+
+Session 2026-10-13-16-54 uses source commit 1e93c2386097f3eda0d52667904eb0c9ba17c9c4 after the fidelity-results merge. All four representative workloads completed successfully on Windows001 (Ryzen 9 5950X, NVIDIA RTX 3060 Ti), Chrome for Testing 148.0.7778.97 and hardware NVIDIA Ampere WebGPU. Results and end-of-run captures are under performance-results/window001/2026-10-13-16-54/vxgi-light-bake/.
+
+Each workload uses 1920 × 1080 at DPR 1, vsync and frame caps off, at least one second of warmup, and at least ten seconds of measurement. Workloads run sequentially, with a fresh browser per scene, seed 17 and a two-second cooldown. Frames are counted in batches of 16 after GPU completion; queues are drained before teardown. GPU timestamp profiling is disabled.
+
+| Scene                  | Baked FPS | Startup (s) | Historical live VXGI FPS |
+| ---------------------- | --------: | ----------: | -----------------------: |
+| model-breakfast-room-w |    728.07 |        3.31 |                   200.33 |
+| cornell-box-basic      |    447.52 |        1.45 |                   217.06 |
+| higharc_dogwood        |   1004.34 |        1.69 |                   254.20 |
+| model-coffee-maker     |    614.11 |        4.32 |                   169.86 |
+
+Startup includes asset loading, atlas generation, voxelization, the complete 64-sample bake, and shader compilation. The process phase includes baking; no isolated bake duration is reported. Steady-state FPS samples the completed light map. Historical live figures come from the separate October 7 session; lighting outputs and dates differ, and these single observations provide no confidence interval. See the fidelity table above for the quality tradeoff.
+
+Validation: all four results have status ok, NVIDIA hardware adapter metadata, vsync off, GPU-completed batch counts, warmup of at least one second, measurement of at least ten seconds, and 1920 × 1080 captures. The comparison site rebuilds with this session. Build, types, lint and 320 coverage tests passed during renderer/fidelity validation.
