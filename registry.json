@@ -4497,7 +4497,9 @@
         "three-new-light-probe-ddgi",
         "three-new-light-bake",
         "three-new-vpl",
-        "three-new-vpl-shadow-maps"
+        "three-new-vpl-shadow-maps",
+        "vxgi",
+        "vxgi-light-bake"
       ]
     }
   ]

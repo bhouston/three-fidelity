@@ -36,7 +36,14 @@ try {
     .map(({ mesh }) => (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material))
     .find((material) => material.lightMap);
   const { DataUtils } = await import('../packages/renderers/node_modules/three/build/three.core.js');
-  const texels = await live.renderer.backend.copyTextureToBuffer(material.lightMap, 0, 0, 1024, 1024, 0);
+  const texels = await live.renderer.backend.copyTextureToBuffer(
+    material.lightMap,
+    0,
+    0,
+    material.lightMap.image.width,
+    material.lightMap.image.height,
+    0,
+  );
   let maximumIrradiance = 0;
   for (let i = 0; i < texels.length; i++) {
     if (i % 4 === 3) continue;
