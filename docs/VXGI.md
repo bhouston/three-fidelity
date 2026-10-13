@@ -30,8 +30,10 @@ Hardware is the existing `window001` machine's NVIDIA RTX 3060 Ti. See [the exis
 
 ## Baked Voxel Cone Tracing
 
-`vxgi-light-bake` uses the LightMapper and UV atlas from [Three.js PR #34991](https://github.com/mrdoob/three.js/pull/34991). Initialization prepares the same default 128-voxel volume with one cached bounce, and bakes 64 jittered samples with three diffuse cones and a 40-degree aperture into a 1024-square HDR light map with three-texel chart padding. GI intensity remains 1. Initialization waits for GPU completion and releases the volume before returning.
+`vxgi-light-bake` uses the LightMapper and UV atlas from [Three.js PR #34991](https://github.com/mrdoob/three.js/pull/34991). Initialization prepares the same default 128-voxel volume with one cached bounce, and bakes 64 jittered samples with three diffuse cones and a 40-degree aperture into an HDR light map with three-texel chart padding. The atlas starts at 1024 square and doubles up to 8192 when dense geometry does not fit; voxel and cone settings remain unchanged. GI intensity remains 1. Initialization waits for GPU completion and releases the volume before returning.
 
 Subsequent frames sample the light map for indirect diffuse; direct lights, shadows, environment/specular lighting and TRAA remain live. Camera movement does not rebake. Geometry and lighting changes require recreating the renderer. This variant does not retain the live VXGI screen-space AO calculation. Atlas geometry and cloned materials are restored and released on disposal. Baking cost is part of startup rather than steady-state performance.
 
 The upstream sources are vendored under `packages/renderers/src/vxgi-bake/` with their MIT license and pinned commit provenance; the existing Three.js fork revision is unchanged.
+
+The Lighting research comparison preset includes both live and baked voxel cone tracing.
