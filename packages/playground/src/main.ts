@@ -55,7 +55,11 @@ const option = (id: string, label: string, content = label) => {
 };
 for (const scene of listSceneNames()) option('scene', scene);
 for (const renderer of rendererNames)
-  option('renderer', renderer, renderer === 'vxgi' ? 'Voxel Cone Tracing' : renderer);
+  option(
+    'renderer',
+    renderer,
+    renderer === 'vxgi' ? 'Voxel Cone Tracing' : renderer === 'vxgi-light-bake' ? 'Baked Voxel Cone Tracing' : renderer,
+  );
 for (const experiment of hierarchyExperiments) option('experiment', experiment);
 const params = new URLSearchParams(location.search);
 select('scene').value =
