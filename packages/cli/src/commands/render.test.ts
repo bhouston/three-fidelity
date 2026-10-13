@@ -10,14 +10,17 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { renderPath } from '../paths.js';
 import type { RenderJob } from '../render-process.js';
 import { command } from './render.js';
+import { renderSuite } from 'fidelity-kit/render';
 
 vi.mock('node:child_process', () => ({ spawn: vi.fn() }));
+vi.mock('fidelity-kit/render', () => ({ renderSuite: vi.fn() }));
 
 const scenes = listSceneNames().slice(0, 2);
 let output: string;
 let jobs: RenderJob[];
 
 beforeEach(async () => {
+  vi.mocked(renderSuite).mockReset();
   output = await mkdtemp(path.join(os.tmpdir(), 'three-fidelity-missing-only-'));
   jobs = [];
   vi.mocked(spawn)
@@ -29,6 +32,31 @@ beforeEach(async () => {
       return child as ReturnType<typeof spawn>;
     });
   vi.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+test('browser rendering forwards missing-only with imported scene and renderer globs', async () => {
+  await yargs()
+    .command(command)
+    .exitProcess(false)
+    .parseAsync([
+      'render',
+      '--missing-only',
+      '--scenes',
+      'pt-gi-*',
+      '--renderers',
+      'three-gpu-pathtracer*,blender',
+      '--output',
+      output,
+    ]);
+  expect(renderSuite).toHaveBeenCalledWith(
+    expect.objectContaining({
+      missingOnly: true,
+      out: output,
+      scene: listSceneNames().filter((name) => name.startsWith('pt-gi-')),
+      renderer: ['three-gpu-pathtracer', 'blender', 'three-gpu-pathtracer-webgpu-experimental'],
+    }),
+  );
+  expect(spawn).not.toHaveBeenCalled();
 });
 
 afterEach(async () => {

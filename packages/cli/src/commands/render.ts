@@ -119,12 +119,13 @@ export const command = defineCommand({
       .option('output', { type: 'string', default: resultsDir, describe: 'Results directory' }),
   handler: async (argv) => {
     if (!argv.native) {
-      if (argv.motion || argv.ssrDebug || argv.missingOnly || argv.width || argv.height)
+      if (argv.motion || argv.ssrDebug || argv.width || argv.height)
         throw new Error('Native diagnostic options require --native');
       return renderSuite({
         registry: 'registry.json',
         rootUrl: argv.rootUrl,
         out: argv.output,
+        missingOnly: argv.missingOnly,
         scene: selectNames(
           registry.scenes.map((s) => s.id),
           argv.scenes,
