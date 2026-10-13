@@ -22,7 +22,15 @@ it('dispatches independent SSR fixes without enabling another fix or changing th
   const setup = {} as SceneInstance;
   const canvas = {} as HTMLCanvasElement;
   const options = { width: 480, height: 360 };
-  for (const fix of ['baseline', 'normal-bias', 'ray-length', 'mirror-bias-docs'] as const) {
+  for (const fix of [
+    'baseline',
+    'normal-bias',
+    'ray-length',
+    'mirror-bias-docs',
+    'dielectric-fresnel',
+    'background-depth',
+    'back-depth',
+  ] as const) {
     createRenderer(`three-dev-ssr-${fix}`, canvas, setup, options);
     expect(createDevSSRRenderer).toHaveBeenLastCalledWith(canvas, setup, options, fix);
   }
@@ -176,4 +184,25 @@ it('dispatches baked VXGI independently of live cone tracing', () => {
   createRenderer('vxgi-light-bake', {} as HTMLCanvasElement, setup, options);
   expect(createVXGILightBakeRenderer).toHaveBeenCalledWith({}, setup, options);
   expect(createVXGIRenderer).not.toHaveBeenCalled();
+});
+
+it('dispatches each full-pipeline SSR ablation independently', () => {
+  const canvas = {} as HTMLCanvasElement,
+    setup = {} as SceneInstance,
+    options = { width: 480, height: 360 };
+  for (const contribution of [
+    'no-filter',
+    'no-hit-specular',
+    'no-back-depth',
+    'no-hiz',
+    'biased-lobe',
+    'short-rays',
+    'distance-fade',
+    'additive-env',
+    'capped-march',
+  ] as const) {
+    createRenderer(`three-new-ssr-${contribution}`, canvas, setup, options);
+    expect(createThreeNewRenderer).toHaveBeenLastCalledWith(canvas, setup, options, undefined, contribution);
+  }
+  expect(createDevSSRRenderer).not.toHaveBeenCalled();
 });

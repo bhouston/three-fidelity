@@ -266,6 +266,90 @@
       "reference": false,
       "enabled": false,
       "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-dielectric-fresnel",
+      "label": "SSR dielectric Fresnel",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-dev-ssr-background-depth",
+      "label": "SSR cleared-depth rejection",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-filter",
+      "label": "New SSR without filter",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-hit-specular",
+      "label": "New SSR without hit redirection",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-back-depth",
+      "label": "New SSR without back depth",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-hiz",
+      "label": "New SSR dense traversal",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-biased-lobe",
+      "label": "New SSR biased lobe",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-short-rays",
+      "label": "New SSR short rays",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-distance-fade",
+      "label": "New SSR artistic fade",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-additive-env",
+      "label": "New SSR additive environment",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-capped-march",
+      "label": "New SSR capped dense march",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-dev-ssr-back-depth",
+      "label": "Dev SSR back-depth hit validation",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR contribution study"
     }
   ],
   "comparisonPresets": [
@@ -321,6 +405,28 @@
         "three-dev-ssr-ggx-baseline",
         "three-dev-ssr-ggx-normal-bias",
         "three-dev-ssr-ggx-ray-length"
+      ],
+      "ref": "three-gpu-pathtracer"
+    },
+    {
+      "id": "ssr-contributions",
+      "name": "SSR contributions",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-baseline",
+        "three-new",
+        "three-dev-ssr-dielectric-fresnel",
+        "three-dev-ssr-background-depth",
+        "three-new-ssr-no-filter",
+        "three-new-ssr-no-hit-specular",
+        "three-new-ssr-no-back-depth",
+        "three-new-ssr-no-hiz",
+        "three-new-ssr-biased-lobe",
+        "three-new-ssr-short-rays",
+        "three-new-ssr-distance-fade",
+        "three-new-ssr-additive-env",
+        "three-new-ssr-capped-march",
+        "three-dev-ssr-back-depth"
       ],
       "ref": "three-gpu-pathtracer"
     }

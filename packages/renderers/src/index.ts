@@ -69,6 +69,30 @@ export function createRenderer(
     });
   };
   switch (name) {
+    case 'three-new-ssr-short-rays':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'short-rays'));
+    case 'three-new-ssr-distance-fade':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'distance-fade'));
+    case 'three-new-ssr-additive-env':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'additive-env'));
+    case 'three-new-ssr-capped-march':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'capped-march'));
+    case 'three-dev-ssr-dielectric-fresnel':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'dielectric-fresnel'));
+    case 'three-dev-ssr-back-depth':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'back-depth'));
+    case 'three-dev-ssr-background-depth':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'background-depth'));
+    case 'three-new-ssr-no-filter':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-filter'));
+    case 'three-new-ssr-no-hit-specular':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-hit-specular'));
+    case 'three-new-ssr-no-back-depth':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-back-depth'));
+    case 'three-new-ssr-no-hiz':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-hiz'));
+    case 'three-new-ssr-biased-lobe':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'biased-lobe'));
     case 'three-dev-ssr-ggx-baseline':
       return instrument(createDevSSRRenderer(canvas, setup, options, 'baseline', true));
     case 'three-dev-ssr-ggx-normal-bias':

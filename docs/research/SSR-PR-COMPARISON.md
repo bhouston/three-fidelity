@@ -62,3 +62,7 @@ Build, typecheck, lint, and unit coverage results are recorded in the PR. All 10
 Dependency audit reports existing findings: two critical, four high, one moderate. High/critical paths are `extract-zip` through Puppeteer and `simple-git` through pathtracer tooling. The new link dependency changes no resolved package versions. Audit is not clean.
 
 Hardware Three.js unit suites were rerun independently on each split branch. No PR targets mrdoob/three.js.
+
+## Follow-up: full pipeline attribution and throughput
+
+The October 13 follow-up adds controlled reflection pipeline ablations, independent new fixes and repeated GPU-completed throughput runs. See [SSR-CONTRIBUTIONS.md](SSR-CONTRIBUTIONS.md). The earlier static results above remain unchanged.

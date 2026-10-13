@@ -19,15 +19,38 @@ export const rendererNames = [
   'three-dev-ssr-ggx-baseline',
   'three-dev-ssr-ggx-normal-bias',
   'three-dev-ssr-ggx-ray-length',
+  'three-dev-ssr-dielectric-fresnel',
+  'three-dev-ssr-background-depth',
+  'three-dev-ssr-back-depth',
+  'three-new-ssr-no-filter',
+  'three-new-ssr-no-hit-specular',
+  'three-new-ssr-no-back-depth',
+  'three-new-ssr-no-hiz',
+  'three-new-ssr-biased-lobe',
+  'three-new-ssr-short-rays',
+  'three-new-ssr-distance-fade',
+  'three-new-ssr-additive-env',
+  'three-new-ssr-capped-march',
   'three-gpu-pathtracer',
   'three-gpu-pathtracer-webgpu-experimental',
 ] as const;
 export type RendererName = (typeof rendererNames)[number];
+export type SSRContribution =
+  | 'full'
+  | 'no-filter'
+  | 'no-hit-specular'
+  | 'no-back-depth'
+  | 'no-hiz'
+  | 'biased-lobe'
+  | 'short-rays'
+  | 'distance-fade'
+  | 'additive-env'
+  | 'capped-march';
 
 /** Scenes a renderer deliberately skips; the CLI writes a "Disabled" placeholder image for each. */
 export const disabledScenes: Partial<Record<RendererName, readonly string[]>> = Object.fromEntries(
   rendererNames
-    .filter((name) => name.startsWith('three-dev-ssr-'))
+    .filter((name) => name.startsWith('three-dev-ssr-') || name.startsWith('three-new-ssr-'))
     .map((name) => [
       name,
       // Reflection ablations are not part of the unrelated representative performance collection.

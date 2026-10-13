@@ -1,5 +1,5 @@
 // Pinned bhouston/three.js dev e615266e7647f0a062219d55e79913237594b6b7, MIT.
-// Only normal-bias and ray-length guard ablation switches differ from that SSRNode.
+// Independent normal-bias, ray-guard, dielectric, back-depth and background-hit ablations.
 /* oxlint-disable no-shadow -- preserve the pinned Three.js implementation's variable names */
 import {
   Break,
@@ -59,6 +59,7 @@ import {
 import { bindAnalyticNoise } from 'three-dev/addons/tsl/utils/RNoise.js';
 import {
   ENV_RAY_LENGTH,
+  F_Schlick,
   getSpecularDominantFactor,
   ggxReflectionSample,
 } from 'three-dev/addons/tsl/utils/SpecularHelpers.js';
@@ -233,6 +234,9 @@ class SSRNode extends Node {
     // Compile-time ablations; set before the first render.
     this.useNormalBias = false;
     this.guardRayLength = false;
+    this.physicalMirrorFresnel = false;
+    this.rejectBackgroundHits = false;
+    this.backDepthNode = null;
     this.normalBias = uniform(0.002);
 
     /**
@@ -848,8 +852,8 @@ class SSRNode extends Node {
       return viewZNode;
     });
 
-    const sampleDepth = (uv) => {
-      const depth = this.depthNode.sample(uv).r;
+    const sampleDepth = (uv, depthNode = this.depthNode) => {
+      const depth = depthNode.sample(uv).r;
 
       if (builder.renderer.logarithmicDepthBuffer === true) {
         const viewZ = logarithmicDepthToViewZ(depth, this._cameraNear, this._cameraFar);
@@ -1107,6 +1111,11 @@ class SSRNode extends Node {
 
         const uvS = xy.mul(invResolution).toVar();
         const d = sampleDepth(uvS).toVar();
+        if (this.rejectBackgroundHits) {
+          If(isBackgroundDepth(d), () => {
+            Continue();
+          });
+        }
         const vZ = getViewZ(d).toVar();
 
         const viewReflectRayZ = reflectRayZAt(s).toVar();
@@ -1122,13 +1131,25 @@ class SSRNode extends Node {
           const minThickness = vPNeighbor.x.sub(vP.x).mul(3).toVar();
           const tk = max(minThickness, this.thickness).toVar();
 
-          If(away.lessThanEqual(tk), () => {
+          let insideSolid = bool(false);
+          if (this.backDepthNode !== null) {
+            const backDepth = sampleDepth(uvS, this.backDepthNode).toVar();
+            const backZ = getViewZ(backDepth).toVar();
+            insideSolid = isBackgroundDepth(d)
+              .not()
+              .and(isBackgroundDepth(backDepth).not())
+              .and(backZ.lessThanEqual(vZ))
+              .and(viewReflectRayZ.greaterThanEqual(backZ.sub(tk)))
+              .toVar();
+          }
+          If(away.lessThanEqual(tk).or(insideSolid), () => {
             const vN = this.normalNode.sample(uvS).rgb.normalize().toVar();
 
             // the reflected ray is pointing towards the same side as the fragment's normal (current ray position),
             // which means it wouldn't reflect off the surface. The loop continues to the next step for the next ray sample.
             if (this.stochastic === false) {
-              If(dot(viewReflectDir, vN).greaterThanEqual(0), () => {
+              const backFacing = dot(viewReflectDir, vN).greaterThanEqual(0);
+              If(this.backDepthNode !== null ? backFacing.and(insideSolid.not()) : backFacing, () => {
                 Continue();
               });
 
@@ -1207,6 +1228,14 @@ class SSRNode extends Node {
             const attenuation = ratio.mul(ratio).toVar();
             const fresnelCoe = div(dot(viewIncidentDir, viewReflectDir).add(1), 2).toVar();
             weightedColor = weightedColor.mul(attenuation.mul(fresnelCoe));
+            if (this.physicalMirrorFresnel) {
+              weightedColor = weightedColor.add(
+                reflectColor.rgb
+                  .mul(attenuation)
+                  .mul(F_Schlick(vec3(0.04), dot(V, viewNormal).clamp()))
+                  .mul(metalness.oneMinus()),
+              );
+            }
           }
 
           hit.assign(1);

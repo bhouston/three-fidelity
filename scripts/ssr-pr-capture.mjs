@@ -22,6 +22,19 @@ const renderers = [
   'three-dev-ssr-ggx-baseline',
   'three-dev-ssr-ggx-normal-bias',
   'three-dev-ssr-ggx-ray-length',
+  'three-dev-ssr-dielectric-fresnel',
+  'three-dev-ssr-background-depth',
+  'three-dev-ssr-back-depth',
+  'three-new',
+  'three-new-ssr-no-filter',
+  'three-new-ssr-no-hit-specular',
+  'three-new-ssr-no-back-depth',
+  'three-new-ssr-no-hiz',
+  'three-new-ssr-biased-lobe',
+  'three-new-ssr-short-rays',
+  'three-new-ssr-distance-fade',
+  'three-new-ssr-additive-env',
+  'three-new-ssr-capped-march',
 ];
 const selectedRenderers = process.env.SSR_RENDERERS?.split(',') || renderers;
 if (selectedRenderers.some((name) => !renderers.includes(name))) throw new Error('Unknown SSR renderer');
@@ -105,10 +118,14 @@ try {
   }
 } finally {
   await browser.close();
-  const manifest = join(artifacts, 'ssr-pr-captures.json');
-  let previous = [];
-  if (process.env.SSR_RENDERERS) {
-    previous = JSON.parse(await readFile(manifest, 'utf8')).filter((row) => !selectedRenderers.includes(row.renderer));
-  }
-  await writeFile(manifest, JSON.stringify([...previous, ...rows], null, 2));
 }
+const manifest = join(artifacts, 'ssr-pr-captures.json');
+let previous = [];
+if (process.env.SSR_RENDERERS) {
+  try {
+    previous = JSON.parse(await readFile(manifest, 'utf8')).filter((row) => !selectedRenderers.includes(row.renderer));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+}
+await writeFile(manifest, JSON.stringify([...previous, ...rows], null, 2));

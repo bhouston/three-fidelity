@@ -2,6 +2,8 @@
 import * as Fork from 'three';
 import {
   AmbientLightNode,
+  BackSide,
+  MeshBasicNodeMaterial,
   DirectionalLightNode,
   HemisphereLightNode,
   LightProbeNode,
@@ -57,7 +59,14 @@ const forkLights: [AnyNode, AnyNode][] = [
   [LightProbeNode, Fork.LightProbe],
 ];
 
-export type SSRFix = 'baseline' | 'normal-bias' | 'ray-length' | 'mirror-bias-docs';
+export type SSRFix =
+  | 'baseline'
+  | 'normal-bias'
+  | 'ray-length'
+  | 'mirror-bias-docs'
+  | 'dielectric-fresnel'
+  | 'background-depth'
+  | 'back-depth';
 
 function createPipeline(
   renderer: WebGPURenderer,
@@ -120,17 +129,28 @@ function createPipeline(
   }
   if (effects.ssr) {
     const params = effects.ssr;
+    let backDepthNode: AnyNode = null;
+    if (fix === 'back-depth') {
+      const backPass = pass(scene, camera);
+      backPass.overrideMaterial = new MeshBasicNodeMaterial({ side: BackSide });
+      backPass.transparent = true;
+      backDepthNode = backPass.getTextureNode('depth');
+    }
     scenePass.getTexture('metalrough').type = UnsignedByteType;
     const scenePassMetalRough: AnyNode = scenePass.getTextureNode('metalrough');
     const ssrPass: AnyNode = ssr(scenePassColor, scenePassDepth, sceneNormal, {
       stochastic,
+      reflectNonMetals: fix === 'dielectric-fresnel',
       metalnessNode: scenePassMetalRough.r,
       roughnessNode: scenePassMetalRough.g,
       camera,
       binaryRefine: params.binaryRefine ?? false,
     });
+    ssrPass.backDepthNode = backDepthNode;
     ssrPass.useNormalBias = fix === 'normal-bias';
     ssrPass.guardRayLength = fix === 'ray-length';
+    ssrPass.physicalMirrorFresnel = fix === 'dielectric-fresnel';
+    ssrPass.rejectBackgroundHits = fix === 'background-depth';
     ssrPass.maxDistance.value = params.maxDistance;
     if (params.quality !== undefined) ssrPass.quality.value = params.quality;
     if (params.blurQuality !== undefined) ssrPass.blurQuality = params.blurQuality;
