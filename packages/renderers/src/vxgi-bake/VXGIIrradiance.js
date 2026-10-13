@@ -1,5 +1,5 @@
 import { Fn, Loop, PI, abs, cos, cross, float, fract, normalize, select, sin, sqrt, vec3 } from 'three/tsl';
-import { createConeTracer } from 'three/addons/lighting/vxgi/VXGIConeTracer.js';
+import { createConeTracer } from './VXGIConeTracer.js';
 
 /**
  * Creates a world-space diffuse irradiance sampler for a prepared {@link VXGIVolume}.

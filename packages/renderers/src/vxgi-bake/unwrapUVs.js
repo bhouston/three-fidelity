@@ -1,6 +1,6 @@
 import { Box2, BufferGeometry, Float32BufferAttribute, Vector2, Vector3 } from 'three';
 import { remapAttribute } from './remapAttribute.js';
-import { potpack } from 'three/addons/libs/potpack.module.js';
+import { potpack } from './potpack.module.js';
 
 /**
  * Generates a unique UV atlas for the meshes in a hierarchy, measured in world space.

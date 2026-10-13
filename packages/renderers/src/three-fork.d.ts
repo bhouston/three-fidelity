@@ -32,29 +32,3 @@ declare module 'three/addons/lighting/LightProbeGrid.js' {
     dispose(): void;
   }
 }
-
-// Voxel transport addon shared by live VXGI and its surface bake.
-declare module 'three/addons/lighting/vxgi/VXGIVolume.js' {
-  import type { Scene } from 'three';
-  import type { WebGPURenderer } from 'three/webgpu';
-  export class VXGIVolume {
-    constructor(resolution?: number);
-    update(renderer: WebGPURenderer, scene: Scene): void;
-    dispose(): void;
-  }
-}
-
-// Keep TypeScript on the public addon boundary instead of traversing generated fork JS.
-declare module 'three/addons/lighting/vxgi/VXGIConeTracer.js' {
-  import type { Node } from 'three/webgpu';
-  export function createConeTracer(
-    volume: unknown,
-    options: unknown,
-  ): (
-    origin: unknown,
-    direction: unknown,
-    angle: unknown,
-    distance: unknown,
-    aoDistance?: unknown,
-  ) => { color: Node; ao: Node };
-}

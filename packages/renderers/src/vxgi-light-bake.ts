@@ -1,5 +1,6 @@
 import { Mesh, PMREMGenerator, RenderPipeline, UnsignedByteType, WebGPURenderer } from 'three/webgpu';
 import { color, mrt, normalView, packNormalToRGB, pass, screenUV, velocity } from 'three/tsl';
+import type { BufferAttribute } from 'three';
 import { computeMorphedAttributes } from 'three/addons/utils/BufferGeometryUtils.js';
 import { VXGIVolume } from 'three/addons/lighting/vxgi/VXGIVolume.js';
 import { traa } from 'three/addons/tsl/display/TRAANode.js';
@@ -59,10 +60,13 @@ export async function createVXGILightBakeRenderer(
     const atlas = unwrapUVs(scene, { resolution: 1024, padding: 3 });
     if (!atlas) throw new Error('Unable to pack the VXGI light-map atlas');
     volume.update(renderer, scene);
-    baker = new LightMapper(renderer, atlas.resolution, vxgiIrradiance(volume, { coneCount: 3 }));
+    baker = new LightMapper(renderer, 1024, vxgiIrradiance(volume, { coneCount: 3 }));
     const bakeMeshes = meshes.map((mesh) => {
       const proxy = new Mesh(mesh.geometry.clone(), mesh.material);
-      const posed = computeMorphedAttributes(mesh);
+      const posed = computeMorphedAttributes(mesh) as {
+        morphedPositionAttribute: BufferAttribute;
+        morphedNormalAttribute: BufferAttribute;
+      };
       proxy.geometry.setAttribute('position', posed.morphedPositionAttribute);
       proxy.geometry.setAttribute('normal', posed.morphedNormalAttribute);
       proxy.matrixAutoUpdate = false;
