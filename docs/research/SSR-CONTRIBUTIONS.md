@@ -42,7 +42,7 @@ The no-fade experiment restores squared distance fade to the incoming-radiance h
 
 ### Throughput experiment
 
-WebGPU, 480×360, seed 1, two sequential repetitions per scene. Vsync/frame cap disabled. Each fresh implementation warmed for at least one second, then ran at least five seconds. Eight complete pipeline frames were submitted per batch and counted only after GPU completion; queues drained before disposal/switching. No individual-frame timings and no concurrent GPU validation/capture jobs. Baseline was run before and after each sequence; percentages use their mean.
+WebGPU, 480×360, seed 1, two sequential repetitions per scene. Vsync/frame cap disabled. Each fresh implementation warmed for at least one second, then ran at least five seconds. Eight complete pipeline frames were submitted per batch and counted only after GPU completion; queues drained before disposal/switching. No individual-frame timings. This task ran no overlapping GPU validation/capture jobs; other swarm activity on the shared machine was not controlled, so these timings are exploratory. Baseline was run before and after each sequence; percentages use their mean.
 
 | Scene / repeat       | Mean baseline FPS | Baseline drift | Normal bias | Ray guard | Identical comment-only |
 | -------------------- | ----------------: | -------------: | ----------: | --------: | ---------------------: |
