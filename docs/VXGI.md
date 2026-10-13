@@ -37,3 +37,22 @@ Subsequent frames sample the light map for indirect diffuse; direct lights, shad
 The upstream sources are vendored under `packages/renderers/src/vxgi-bake/` with their MIT license and pinned commit provenance; the existing Three.js fork revision is unchanged.
 
 The Lighting research comparison preset includes both live and baked voxel cone tracing.
+
+## Baked fidelity captures — October 13, 2026
+
+All 55 current, non-historical fidelity scenes have `vxgi-light-bake` beauty captures at their registry dimensions and frame counts. The 200 imported historical entries retain their existing results. Captures use Chrome for Testing 148.0.7778.97 on Windows001 with hardware NVIDIA Ampere WebGPU (RTX 3060 Ti); native integration reports D3D12 driver 32.0.16.1714.
+
+The renderer uses the merged implementation plus the dense-atlas fallback. Coffeemat required an atlas larger than 1024. Atlas packing retries preserve the voxel and cone settings; all 55 image dimensions were checked against the registry.
+
+PSNR in dB against the existing three-gpu-pathtracer reference (higher is closer):
+
+| Scene                  | Live VXGI PSNR | Baked VXGI PSNR |
+| ---------------------- | -------------: | --------------: |
+| cornell-box-basic      |          22.61 |           20.63 |
+| model-breakfast-room-w |          14.45 |           14.87 |
+| higharc_dogwood        |          20.00 |           20.19 |
+| model-coffee-maker     |          15.25 |           19.32 |
+
+Baking is a diffuse-lighting approximation, with different noise and occlusion behavior from live GI/AO. Cornell retains visible irradiance bands with the upstream sampler. A hardware atlas check using a known world-position/normal field passes on transformed geometry; constant irradiance produces a uniform atlas. Dogwood reports upstream Float32 UV precision limits and possible chart overlap. These results are retained for comparison. Camera motion preserves the finished bake; geometry or lighting changes require recreating the renderer.
+
+Validation: build, typecheck, lint (warnings only), formatting, all 320 tests with coverage (four workers, 30-second timeout), hardware integration on the four representative scenes, and comparison-site build passed. The unchanged dependency graph has seven audit advisories (two critical, four high, one moderate).
