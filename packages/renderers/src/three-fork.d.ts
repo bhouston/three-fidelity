@@ -43,3 +43,18 @@ declare module 'three/addons/lighting/vxgi/VXGIVolume.js' {
     dispose(): void;
   }
 }
+
+// Keep TypeScript on the public addon boundary instead of traversing generated fork JS.
+declare module 'three/addons/lighting/vxgi/VXGIConeTracer.js' {
+  import type { Node } from 'three/webgpu';
+  export function createConeTracer(
+    volume: unknown,
+    options: unknown,
+  ): (
+    origin: unknown,
+    direction: unknown,
+    angle: unknown,
+    distance: unknown,
+    aoDistance?: unknown,
+  ) => { color: Node; ao: Node };
+}
