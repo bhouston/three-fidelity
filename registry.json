@@ -358,6 +358,76 @@
         "noiseThreshold": 0,
         "minSamples": 128
       }
+    },
+    {
+      "id": "three-dev-ssr-baseline",
+      "name": "Dev SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-baseline"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-normal-bias",
+      "name": "SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-normal-bias"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ray-length",
+      "name": "SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ray-length"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-mirror-bias-docs",
+      "name": "SSR comment only",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-mirror-bias-docs"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-baseline",
+      "name": "Dev GGX SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-baseline"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-normal-bias",
+      "name": "GGX SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-normal-bias"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-ray-length",
+      "name": "GGX SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-ray-length"
+      },
+      "category": "SSR PR comparisons"
     }
   ],
   "scenes": [
@@ -4500,6 +4570,29 @@
         "three-new-vpl-shadow-maps",
         "vxgi",
         "vxgi-light-bake"
+      ]
+    },
+    {
+      "id": "ssr-pr-mirror",
+      "name": "SSR fixes (mirror)",
+      "ref": "three-gpu-pathtracer",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-baseline",
+        "three-dev-ssr-normal-bias",
+        "three-dev-ssr-ray-length",
+        "three-dev-ssr-mirror-bias-docs"
+      ]
+    },
+    {
+      "id": "ssr-pr-ggx",
+      "name": "SSR fixes (GGX)",
+      "ref": "three-gpu-pathtracer",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-ggx-baseline",
+        "three-dev-ssr-ggx-normal-bias",
+        "three-dev-ssr-ggx-ray-length"
       ]
     }
   ]

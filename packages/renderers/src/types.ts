@@ -12,13 +12,28 @@ export const rendererNames = [
   'three-new-light-probe',
   'three-new-light-probe-ddgi',
   'three-current',
+  'three-dev-ssr-baseline',
+  'three-dev-ssr-normal-bias',
+  'three-dev-ssr-ray-length',
+  'three-dev-ssr-mirror-bias-docs',
+  'three-dev-ssr-ggx-baseline',
+  'three-dev-ssr-ggx-normal-bias',
+  'three-dev-ssr-ggx-ray-length',
   'three-gpu-pathtracer',
   'three-gpu-pathtracer-webgpu-experimental',
 ] as const;
 export type RendererName = (typeof rendererNames)[number];
 
 /** Scenes a renderer deliberately skips; the CLI writes a "Disabled" placeholder image for each. */
-export const disabledScenes: Partial<Record<RendererName, readonly string[]>> = {};
+export const disabledScenes: Partial<Record<RendererName, readonly string[]>> = Object.fromEntries(
+  rendererNames
+    .filter((name) => name.startsWith('three-dev-ssr-'))
+    .map((name) => [
+      name,
+      // Reflection ablations are not part of the unrelated representative performance collection.
+      ['model-breakfast-room-w', 'cornell-box-basic', 'higharc_dogwood', 'model-coffee-maker'],
+    ]),
+);
 
 export interface SSGIWorkExperiment {
   earlyExit?: boolean;

@@ -217,6 +217,55 @@
       "reference": false,
       "enabled": false,
       "category": "Experiments"
+    },
+    {
+      "id": "three-dev-ssr-baseline",
+      "label": "Dev SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-normal-bias",
+      "label": "SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ray-length",
+      "label": "SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-mirror-bias-docs",
+      "label": "SSR comment only",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-baseline",
+      "label": "Dev GGX SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-normal-bias",
+      "label": "GGX SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-ray-length",
+      "label": "GGX SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "category": "SSR PR comparisons"
     }
   ],
   "comparisonPresets": [
@@ -249,6 +298,29 @@
         "three-new-vpl-shadow-maps",
         "vxgi",
         "vxgi-light-bake"
+      ],
+      "ref": "three-gpu-pathtracer"
+    },
+    {
+      "id": "ssr-pr-mirror",
+      "name": "SSR fixes (mirror)",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-baseline",
+        "three-dev-ssr-normal-bias",
+        "three-dev-ssr-ray-length",
+        "three-dev-ssr-mirror-bias-docs"
+      ],
+      "ref": "three-gpu-pathtracer"
+    },
+    {
+      "id": "ssr-pr-ggx",
+      "name": "SSR fixes (GGX)",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-ggx-baseline",
+        "three-dev-ssr-ggx-normal-bias",
+        "three-dev-ssr-ggx-ray-length"
       ],
       "ref": "three-gpu-pathtracer"
     }

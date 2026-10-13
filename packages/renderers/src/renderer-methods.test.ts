@@ -3,6 +3,7 @@ import type { SceneInstance } from '@three-fidelity/scenes';
 import { createRenderer } from './index.js';
 import { createThreeNewRenderer } from './three-new.js';
 import { createCurrentRenderer } from './three-current.js';
+import { createDevSSRRenderer } from './three-dev-ssr.js';
 import { createVXGIRenderer } from './vxgi.js';
 import { createVXGILightBakeRenderer } from './vxgi-light-bake.js';
 import { createRenderer as createPathTracerRenderer } from 'fidelity-kit-three-gpu-pathtracer';
@@ -11,10 +12,27 @@ import type { RendererName, HierarchyExperiment } from './types.js';
 
 vi.mock('./three-new.js', () => ({ createThreeNewRenderer: vi.fn() }));
 vi.mock('./three-current.js', () => ({ createCurrentRenderer: vi.fn() }));
+vi.mock('./three-dev-ssr.js', () => ({ createDevSSRRenderer: vi.fn() }));
 vi.mock('./vxgi.js', () => ({ createVXGIRenderer: vi.fn() }));
 vi.mock('./vxgi-light-bake.js', () => ({ createVXGILightBakeRenderer: vi.fn() }));
 vi.mock('fidelity-kit-three-gpu-pathtracer', () => ({ createRenderer: vi.fn(), dequantizeAttributes: vi.fn() }));
 beforeEach(() => vi.clearAllMocks());
+
+it('dispatches independent SSR fixes without enabling another fix or changing the stock baseline', () => {
+  const setup = {} as SceneInstance;
+  const canvas = {} as HTMLCanvasElement;
+  const options = { width: 480, height: 360 };
+  for (const fix of ['baseline', 'normal-bias', 'ray-length', 'mirror-bias-docs'] as const) {
+    createRenderer(`three-dev-ssr-${fix}`, canvas, setup, options);
+    expect(createDevSSRRenderer).toHaveBeenLastCalledWith(canvas, setup, options, fix);
+  }
+  for (const fix of ['baseline', 'normal-bias', 'ray-length'] as const) {
+    createRenderer(`three-dev-ssr-ggx-${fix}`, canvas, setup, options);
+    expect(createDevSSRRenderer).toHaveBeenLastCalledWith(canvas, setup, options, fix, true);
+  }
+  expect(createCurrentRenderer).not.toHaveBeenCalled();
+  expect(createThreeNewRenderer).not.toHaveBeenCalled();
+});
 
 it('dispatches each renderer name to its own pipeline without changing the scene setup', () => {
   const setup = { effects: { ssgi: { sliceCount: 8, stepCount: 32, radius: 32, thickness: 4 } } } as SceneInstance;

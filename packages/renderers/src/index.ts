@@ -2,6 +2,7 @@ import type { SceneInstance } from '@three-fidelity/scenes';
 import { createRenderer as createPathTracerRenderer } from 'fidelity-kit-three-gpu-pathtracer';
 import { createWebGPUPathTracerRenderer } from './pathtracer-webgpu.js';
 import { createCurrentRenderer } from './three-current.js';
+import { createDevSSRRenderer } from './three-dev-ssr.js';
 import { createVXGIRenderer } from './vxgi.js';
 import { createVXGILightBakeRenderer } from './vxgi-light-bake.js';
 import { createThreeNewRenderer } from './three-new.js';
@@ -68,6 +69,20 @@ export function createRenderer(
     });
   };
   switch (name) {
+    case 'three-dev-ssr-ggx-baseline':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'baseline', true));
+    case 'three-dev-ssr-ggx-normal-bias':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'normal-bias', true));
+    case 'three-dev-ssr-ggx-ray-length':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'ray-length', true));
+    case 'three-dev-ssr-baseline':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'baseline'));
+    case 'three-dev-ssr-normal-bias':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'normal-bias'));
+    case 'three-dev-ssr-ray-length':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'ray-length'));
+    case 'three-dev-ssr-mirror-bias-docs':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'mirror-bias-docs'));
     case 'three-gpu-pathtracer-webgpu-experimental':
       return instrument(createWebGPUPathTracerRenderer(canvas, setup, options));
     case 'vxgi-light-bake':

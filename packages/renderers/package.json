@@ -23,6 +23,7 @@
     "@three-fidelity/scenes": "workspace:*",
     "fidelity-kit-three-gpu-pathtracer": "workspace:*",
     "three": "workspace:*",
+    "three-dev": "link:../../submodules/three-dev",
     "three-gpu-pathtracer": "workspace:*",
     "three-mesh-bvh": "^0.9.15",
     "three-r186": "npm:three@0.186.1"
