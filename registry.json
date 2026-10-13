@@ -337,6 +337,16 @@
       "category": "Experiments"
     },
     {
+      "id": "vxgi-light-bake",
+      "name": "Baked Voxel Cone Tracing",
+      "reference": false,
+      "enabled": true,
+      "params": {
+        "renderer": "vxgi-light-bake"
+      },
+      "category": "Experiments"
+    },
+    {
       "id": "three-gpu-pathtracer-webgpu-experimental",
       "name": "WebGPU pathtracer (experimental)",
       "category": "Experiments",
@@ -3542,7 +3552,19 @@
           "params": {}
         },
         {
+          "renderer": "vxgi-light-bake",
+          "scene": "cornell-box-basic",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
           "renderer": "vxgi",
+          "scene": "steampunk-camera",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
+          "renderer": "vxgi-light-bake",
           "scene": "steampunk-camera",
           "durationMs": 10000,
           "params": {}
@@ -4409,7 +4431,19 @@
           "params": {}
         },
         {
+          "renderer": "vxgi-light-bake",
+          "scene": "model-breakfast-room-w",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
           "renderer": "vxgi",
+          "scene": "cornell-box-basic",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
+          "renderer": "vxgi-light-bake",
           "scene": "cornell-box-basic",
           "durationMs": 10000,
           "params": {}
@@ -4421,7 +4455,19 @@
           "params": {}
         },
         {
+          "renderer": "vxgi-light-bake",
+          "scene": "higharc_dogwood",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
           "renderer": "vxgi",
+          "scene": "model-coffee-maker",
+          "durationMs": 10000,
+          "params": {}
+        },
+        {
+          "renderer": "vxgi-light-bake",
           "scene": "model-coffee-maker",
           "durationMs": 10000,
           "params": {}

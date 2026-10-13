@@ -3,6 +3,7 @@ import { createRenderer as createPathTracerRenderer } from 'fidelity-kit-three-g
 import { createWebGPUPathTracerRenderer } from './pathtracer-webgpu.js';
 import { createCurrentRenderer } from './three-current.js';
 import { createVXGIRenderer } from './vxgi.js';
+import { createVXGILightBakeRenderer } from './vxgi-light-bake.js';
 import { createThreeNewRenderer } from './three-new.js';
 import { hierarchyExperiments, ssrTemporalProfiles } from './types.js';
 import { createRendererProfiler } from './profiling.js';
@@ -69,6 +70,8 @@ export function createRenderer(
   switch (name) {
     case 'three-gpu-pathtracer-webgpu-experimental':
       return instrument(createWebGPUPathTracerRenderer(canvas, setup, options));
+    case 'vxgi-light-bake':
+      return instrument(createVXGILightBakeRenderer(canvas, setup, options));
     case 'vxgi':
       return instrument(createVXGIRenderer(canvas, setup, options));
     case 'three-gpu-pathtracer':

@@ -4,6 +4,7 @@ import type { LivePipeline } from '@three-fidelity/runtime';
 
 export const rendererNames = [
   'vxgi',
+  'vxgi-light-bake',
   'three-new',
   'three-new-light-bake',
   'three-new-vpl',

@@ -4,6 +4,7 @@ import { createRenderer } from './index.js';
 import { createThreeNewRenderer } from './three-new.js';
 import { createCurrentRenderer } from './three-current.js';
 import { createVXGIRenderer } from './vxgi.js';
+import { createVXGILightBakeRenderer } from './vxgi-light-bake.js';
 import { createRenderer as createPathTracerRenderer } from 'fidelity-kit-three-gpu-pathtracer';
 import { hierarchyExperiments, hierarchyImageName } from './types.js';
 import type { RendererName, HierarchyExperiment } from './types.js';
@@ -11,6 +12,7 @@ import type { RendererName, HierarchyExperiment } from './types.js';
 vi.mock('./three-new.js', () => ({ createThreeNewRenderer: vi.fn() }));
 vi.mock('./three-current.js', () => ({ createCurrentRenderer: vi.fn() }));
 vi.mock('./vxgi.js', () => ({ createVXGIRenderer: vi.fn() }));
+vi.mock('./vxgi-light-bake.js', () => ({ createVXGILightBakeRenderer: vi.fn() }));
 vi.mock('fidelity-kit-three-gpu-pathtracer', () => ({ createRenderer: vi.fn(), dequantizeAttributes: vi.fn() }));
 beforeEach(() => vi.clearAllMocks());
 
@@ -148,4 +150,12 @@ it('rejects the retired VPL mirror and box-projected variants', () => {
       'Unknown renderer',
     );
   }
+});
+
+it('dispatches baked VXGI independently of live cone tracing', () => {
+  const setup = { effects: {} } as SceneInstance;
+  const options = { width: 640, height: 480 };
+  createRenderer('vxgi-light-bake', {} as HTMLCanvasElement, setup, options);
+  expect(createVXGILightBakeRenderer).toHaveBeenCalledWith({}, setup, options);
+  expect(createVXGIRenderer).not.toHaveBeenCalled();
 });
