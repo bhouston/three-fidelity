@@ -4,11 +4,12 @@ import { runOnLanes, jobLanes } from '../queues.js';
 import os from 'node:os';
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hierarchyExperiments, hierarchyImageName, rendererNames } from '@three-fidelity/renderers';
 import { listSceneNames } from '@three-fidelity/scenes';
 import { defineCommand } from 'yargs-file-commands';
-import { renderPath, resultsDir } from '../paths.js';
+import { renderPath, resultsDir, repoRoot } from '../paths.js';
 import type { RenderJob } from '../render-process.js';
 import { selectNames } from '../select.js';
 
@@ -121,31 +122,39 @@ export const command = defineCommand({
     if (!argv.native) {
       if (argv.motion || argv.ssrDebug || argv.width || argv.height)
         throw new Error('Native diagnostic options require --native');
-      return renderSuite({
-        registry: 'registry.json',
-        rootUrl: argv.rootUrl,
-        out: argv.output,
-        missingOnly: argv.missingOnly,
-        scene: selectNames(
-          registry.scenes.map((s) => s.id),
-          argv.scenes,
-          'scene',
-        ),
-        renderer: selectNames(
-          registry.renderers.filter((r) => argv.renderers !== undefined || r.enabled !== false).map((r) => r.id),
-          argv.renderers ?? '*',
-          'renderer',
-        ),
-        frames: argv.frames,
-        captureParams: {
-          samples: argv.samples,
-          noiseThreshold: argv.noiseThreshold,
-          minSamples: argv.minSamples,
-          cyclesNoiseThreshold: argv.cyclesNoiseThreshold,
-          blenderDevice: argv.blenderDevice,
-        },
-        externalLane: argv.blenderDevice === 'auto' ? undefined : argv.blenderDevice,
-      });
+      const out = path.resolve(argv.output);
+      const previousCwd = process.cwd();
+      // pnpm starts this package in packages/cli; registry external commands are repository-relative.
+      process.chdir(repoRoot);
+      try {
+        return await renderSuite({
+          registry: 'registry.json',
+          rootUrl: argv.rootUrl,
+          out,
+          missingOnly: argv.missingOnly,
+          scene: selectNames(
+            registry.scenes.map((s) => s.id),
+            argv.scenes,
+            'scene',
+          ),
+          renderer: selectNames(
+            registry.renderers.filter((r) => argv.renderers !== undefined || r.enabled !== false).map((r) => r.id),
+            argv.renderers ?? '*',
+            'renderer',
+          ),
+          frames: argv.frames,
+          captureParams: {
+            samples: argv.samples,
+            noiseThreshold: argv.noiseThreshold,
+            minSamples: argv.minSamples,
+            cyclesNoiseThreshold: argv.cyclesNoiseThreshold,
+            blenderDevice: argv.blenderDevice,
+          },
+          externalLane: argv.blenderDevice === 'auto' ? undefined : argv.blenderDevice,
+        });
+      } finally {
+        process.chdir(previousCwd);
+      }
     }
     const scenes = selectNames(listSceneNames(), argv.scenes, 'scene');
     const enabled = cliRendererNames.filter((name) => {
