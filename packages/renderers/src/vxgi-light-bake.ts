@@ -59,6 +59,9 @@ export async function createVXGILightBakeRenderer(
     // The unwrapper snapshots skinned/morphed geometry at the suite's canonical pose.
     const atlas = unwrapUVs(scene, { resolution: 1024, padding: 3 });
     if (!atlas) throw new Error('Unable to pack the VXGI light-map atlas');
+    // VXGI injection uses the same shadow maps as the live pipeline.
+    renderer.setSize(width, height, false);
+    renderer.render(scene, camera);
     volume.update(renderer, scene);
     baker = new LightMapper(renderer, 1024, vxgiIrradiance(volume, { coneCount: 3 }));
     const bakeMeshes = meshes.map((mesh) => {
