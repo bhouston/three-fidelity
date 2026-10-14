@@ -556,6 +556,8 @@ export class ProgressiveLightBake {
         }
         for (const entry of this.atlas.entries) {
           for (const m of Array.isArray(entry.mesh.material) ? entry.mesh.material : [entry.mesh.material]) {
+            // Unlit materials retain their authored color independently of irradiance.
+            if (m.isMeshBasicMaterial || m.isMeshBasicNodeMaterial) continue;
             m.lightMap = this.display.texture;
             m.lightMapIntensity = 1;
             m.needsUpdate = true;
