@@ -10,6 +10,8 @@ pnpm cli render --native --scenes "pt-*" --renderers "three-current,three-new-ss
 
 All 200 definitions loaded successfully from the pinned asset libraries. The shared Blender adapter now accepts tone-mapped unlit materials and explicitly translates untextured points/solid one-pixel lines into camera-matched triangle surfaces. These still-capture primitives retain pixel size, vertex color and opacity; their geometry is specific to the chosen camera and resolution. The suite opts into this feature for Blender captures. The voxel light-map bake derives flat normals for inputs that omit them, including their posed morph geometry, without changing the source mesh.
 
+Native Windows captures require `webgpu` 0.6.2 or newer, which ships Dawn's DXC compiler. Version 0.6.1 forces FXC and fails to compile some VPL pipelines. The native host requests the physical adapter's supported buffer limits and rejects uncaptured validation errors. Newly generated images from failed pipelines are removed before retrying; historical captures are preserved. Light-map atlases retain their original budget when it fits and grow only when packing requires it, up to the hardware texture limit.
+
 Two large LEGO voxel-bake jobs exceeded Node's default heap. Retry memory-heavy jobs serially with a larger heap; this changes the host memory allowance rather than the scene, atlas or sampling policy:
 
 ```powershell
