@@ -1,4 +1,5 @@
 import { Mesh, PMREMGenerator, RenderPipeline, UnsignedByteType, WebGPURenderer } from 'three/webgpu';
+import { initializeAreaLights } from './area-lights.js';
 import { color, mrt, normalView, packNormalToRGB, pass, screenUV, velocity } from 'three/tsl';
 import { createBakeProxy } from './vxgi-bake/geometry.js';
 import { VXGIVolume } from 'three/addons/lighting/vxgi/VXGIVolume.js';
@@ -24,6 +25,7 @@ export async function createVXGILightBakeRenderer(
   renderer.shadowMap.enabled = true;
   configureRenderer(renderer, effects);
   await renderer.init();
+  initializeAreaLights();
   const releaseScene = prepareScene(setup, {
     createGradient: ({ center, edge }) => screenUV.distance(0.5).remap(0, 0.5).mix(color(center), color(edge)),
     bakeEnvironment(environment) {
