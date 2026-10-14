@@ -5,6 +5,7 @@ import { giDiagnosticScenes } from './gi-diagnostics.js';
 import { ssgiScenes } from './ssgi.js';
 import mappings from './scene-map.json' with { type: 'json' };
 import type { SceneDefinition } from '../types.js';
+import { normalizeLineLoops } from './line-loops.js';
 const ids = new Map(mappings.map((entry) => [entry.source, entry.id]));
 export const pathtracerScenes: SceneDefinition[] = [
   ...ssgiScenes,
@@ -30,6 +31,7 @@ export const pathtracerScenes: SceneDefinition[] = [
           return ctx.loadCollada(asset);
         },
       });
+      normalizeLineLoops(setup.scene);
       const { toneMapping, toneMappingExposure, ...rest } = setup;
       return { ...rest, effects: { toneMapping, toneMappingExposure, temporalDenoise: false, frames: 1 } };
     },

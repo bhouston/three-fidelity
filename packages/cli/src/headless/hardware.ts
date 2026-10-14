@@ -10,3 +10,18 @@ export function requireHardwareGPU(description: string): void {
     );
   }
 }
+
+/** Large imported BVHs can exceed WebGPU's conservative default buffer limits. */
+export function hardwareBufferLimits(
+  limits: Pick<GPUSupportedLimits, 'maxBufferSize' | 'maxStorageBufferBindingSize'>,
+  requested: GPUDeviceDescriptor['requiredLimits'] = {},
+): GPUDeviceDescriptor['requiredLimits'] {
+  return {
+    maxBufferSize: limits.maxBufferSize,
+    maxStorageBufferBindingSize: Math.min(
+      limits.maxStorageBufferBindingSize,
+      requested.maxBufferSize ?? limits.maxBufferSize,
+    ),
+    ...requested,
+  };
+}

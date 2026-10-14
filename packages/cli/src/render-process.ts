@@ -27,6 +27,7 @@ export interface RenderJob {
   cyclesNoiseThreshold?: number;
   blenderDevice?: 'auto' | 'cpu' | 'gpu';
   captureLane?: 'cpu' | 'gpu';
+  allowAllBlack?: boolean;
   /**
    * Temporal evaluation: the camera orbits the scene target by `degrees` (about world Y) back to the scene's pose over
    * `moveFrames` rendered frames, then stays still. One image per entry of `captures` (frames at rest after arriving;
@@ -208,6 +209,7 @@ async function main(job: RenderJob): Promise<void> {
       noiseThreshold: job.cyclesNoiseThreshold,
       device: job.blenderDevice,
       captureLane: job.captureLane,
+      allowAllBlack: job.allowAllBlack,
     });
     const renderMs = performance.now() - renderStart;
     const file = renderPath(name, 'blender', job.outDir);
