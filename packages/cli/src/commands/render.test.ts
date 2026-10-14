@@ -129,6 +129,15 @@ test('missing-only skips a complete set without starting any children', async ()
   expect(spawn).not.toHaveBeenCalled();
 });
 
+test('intentional black references require explicit native Blender selection', async () => {
+  await render('--allow-all-black', '--renderers', 'blender');
+  expect(jobs[0]!.allowAllBlack).toBe(true);
+  await expect(render('--allow-all-black')).rejects.toThrow('requires selecting only Blender');
+  await expect(
+    yargs().command(command).exitProcess(false).parseAsync(['render', '--allow-all-black', '--renderers', 'blender']),
+  ).rejects.toThrow('require --native');
+});
+
 test('full renderer names preserve variant and SSR debug output names', async () => {
   const experiment = 'ssr-hiz-tight';
   const name = hierarchyImageName('three-new', experiment);

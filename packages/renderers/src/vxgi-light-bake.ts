@@ -1,7 +1,6 @@
 import { Mesh, PMREMGenerator, RenderPipeline, UnsignedByteType, WebGPURenderer } from 'three/webgpu';
 import { color, mrt, normalView, packNormalToRGB, pass, screenUV, velocity } from 'three/tsl';
-import type { BufferAttribute } from 'three';
-import { computeMorphedAttributes } from 'three/addons/utils/BufferGeometryUtils.js';
+import { createBakeProxy } from './vxgi-bake/geometry.js';
 import { VXGIVolume } from 'three/addons/lighting/vxgi/VXGIVolume.js';
 import { traa } from 'three/addons/tsl/display/TRAANode.js';
 import { LightMapper } from './vxgi-bake/LightMapper.js';
@@ -69,18 +68,7 @@ export async function createVXGILightBakeRenderer(
     renderer.render(scene, camera);
     volume.update(renderer, scene);
     baker = new LightMapper(renderer, resolution, vxgiIrradiance(volume, { coneCount: 3 }));
-    const bakeMeshes = meshes.map((mesh) => {
-      const proxy = new Mesh(mesh.geometry.clone(), mesh.material);
-      const posed = computeMorphedAttributes(mesh) as {
-        morphedPositionAttribute: BufferAttribute;
-        morphedNormalAttribute: BufferAttribute;
-      };
-      proxy.geometry.setAttribute('position', posed.morphedPositionAttribute);
-      proxy.geometry.setAttribute('normal', posed.morphedNormalAttribute);
-      proxy.matrixAutoUpdate = false;
-      proxy.matrix.copy(mesh.matrixWorld);
-      return proxy;
-    });
+    const bakeMeshes = meshes.map(createBakeProxy);
     try {
       baker.addObjects(bakeMeshes);
       baker.update(bakeSamples);
