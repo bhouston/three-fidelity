@@ -12,6 +12,8 @@ All 200 definitions loaded successfully from the pinned asset libraries. The sha
 
 Native Windows captures require `webgpu` 0.6.2 or newer, which ships Dawn's DXC compiler. Version 0.6.1 forces FXC and fails to compile some VPL pipelines. The native host requests the physical adapter's supported buffer limits and rejects uncaptured validation errors. Newly generated images from failed pipelines are removed before retrying; historical captures are preserved. Light-map atlases retain their original budget when it fits and grow only when packing requires it, up to the hardware texture limit.
 
+Both Three versions initialize their own area-light BRDF lookup textures. This enables the imported rectangular-light rigs rather than silently producing black or partially lit scenes. The light-map bake preserves unlit materials without applying its irradiance texture. Imported closed line loops use equivalent indexed closed strips so WebGPU renders their closing edges. These changes preserve authored geometry, cameras and lighting.
+
 Two large LEGO voxel-bake jobs exceeded Node's default heap. Retry memory-heavy jobs serially with a larger heap; this changes the host memory allowance rather than the scene, atlas or sampling policy:
 
 ```powershell
