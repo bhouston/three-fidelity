@@ -306,6 +306,8 @@ class NewSSRNode extends Node {
      * @type {boolean}
      */
     this.outputRadiance = outputRadiance;
+    // Research-only ablation: emulate the legacy plane-distance fade without shortening the ray.
+    this.researchDistanceFade = null;
 
     /**
      * The node that represents the beauty pass.
@@ -2052,6 +2054,14 @@ class NewSSRNode extends Node {
 
           if (this.stochastic === true && this.outputRadiance)
             hitWeight.assign(computeScreenBorderFactor(uvS, hitBorderWidth));
+          if (this.researchDistanceFade !== null) {
+            hitWeight.mulAssign(
+              float(1)
+                .sub(pointPlaneDistance(vP, viewPosition, viewNormal).div(this.researchDistanceFade))
+                .clamp()
+                .pow(2),
+            );
+          }
 
           hit.assign(1);
           output.assign(vec4(weightedColor, worldDistance));

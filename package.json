@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "build": "pnpm build:fidelity-kit && tsc -b && pnpm build:three && pnpm -r --if-present --filter \"@three-fidelity/*\" build",
+    "build": "node scripts/prepare-three-dev.mjs && pnpm build:fidelity-kit && tsc -b && pnpm build:three && pnpm -r --if-present --filter \"@three-fidelity/*\" build",
     "dev": "pnpm -r --parallel --stream dev",
     "tsc": "tsc -b && pnpm --filter @three-fidelity/playground tsc",
     "format": "oxfmt .",
@@ -22,7 +22,7 @@
     "prefidelity:build": "pnpm build:fidelity-kit",
     "fidelity:build": "pnpm build:fidelity-kit && node scripts/build-site.mjs",
     "live": "pnpm --filter @three-fidelity/playground dev --open /performance.html",
-    "build:three": "pnpm --filter ./submodules/three.js build",
+    "build:three": "pnpm --filter ./submodules/three.js build && node scripts/prepare-three-dev.mjs",
     "test:browser": "pnpm --filter @three-fidelity/playground test:browser",
     "preperformance:run": "pnpm build:fidelity-kit",
     "performance:run": "pnpm build:fidelity-kit && fidelity-kit benchmark ${PERFORMANCE_MACHINE:+--machine \"$PERFORMANCE_MACHINE\"} --registry registry.json --collection default --out performance-results",
