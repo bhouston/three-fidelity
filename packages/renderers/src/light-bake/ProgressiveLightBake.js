@@ -38,7 +38,7 @@ import {
   vec4,
 } from 'three/tsl';
 import { StaticGeometryGenerator } from 'three-mesh-bvh';
-import { prepareAtlas } from './atlas.js';
+import { prepareAdaptiveAtlas } from './atlas-policy.js';
 import { createBakeTraceMeshes } from './trace-geometry.js';
 
 const PI = Math.PI;
@@ -98,7 +98,8 @@ export class ProgressiveLightBake {
       for (const mesh of snapshots) source.parent.add(mesh);
       source.visible = false;
     }
-    this.atlas = prepareAtlas(scene, density);
+    const atlasLimit = Math.min(8192, this.renderer.backend?.device?.limits?.maxTextureDimension2D ?? 2048);
+    this.atlas = prepareAdaptiveAtlas(scene, density, atlasLimit);
     const size = this.atlas.size;
     this.camera = new OrthographicCamera(-1, 1, 1, -1, 0, 2);
     this.camera.position.z = 1;
@@ -555,6 +556,8 @@ export class ProgressiveLightBake {
         }
         for (const entry of this.atlas.entries) {
           for (const m of Array.isArray(entry.mesh.material) ? entry.mesh.material : [entry.mesh.material]) {
+            // Unlit materials retain their authored color independently of irradiance.
+            if (m.isMeshBasicMaterial || m.isMeshBasicNodeMaterial) continue;
             m.lightMap = this.display.texture;
             m.lightMapIntensity = 1;
             m.needsUpdate = true;

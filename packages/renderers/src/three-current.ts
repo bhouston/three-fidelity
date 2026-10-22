@@ -4,6 +4,7 @@
 // Scenes with both chain the SSGI composite into the SSR add.
 // It is a fixed baseline: nothing here comes from the fork, so fork edits cannot move it.
 import * as Fork from 'three';
+import { RectAreaLightTexturesLib } from 'three-r186/addons/lights/RectAreaLightTexturesLib.js';
 import {
   AmbientLightNode,
   DirectionalLightNode,
@@ -60,6 +61,7 @@ const forkLights: [AnyNode, AnyNode][] = [
   [RectAreaLightNode, Fork.RectAreaLight],
   [LightProbeNode, Fork.LightProbe],
 ];
+let areaLightsInitialized = false;
 
 function createPipeline(renderer: WebGPURenderer, setup: SceneInstance): RenderPipeline {
   const { scene, camera, effects } = setup as AnyNode as {
@@ -156,6 +158,10 @@ export async function createCurrentRenderer(
   renderer.shadowMap.enabled = true;
   configureRenderer(renderer, effects);
   await renderer.init();
+  if (!areaLightsInitialized) {
+    RectAreaLightNode.setLTC(RectAreaLightTexturesLib.init());
+    areaLightsInitialized = true;
+  }
 
   const releaseScene = prepareScene(setup, {
     createGradient: ({ center, edge }) => screenUV.distance(0.5).remap(0, 0.5).mix(color(center), color(edge)),

@@ -2,6 +2,7 @@
 // solid-angle SSGI (vendored ssgi-fast/SSGINode.js) and real-time stochastic SSR (vendored ssr/NewSSRNode.js),
 // resolved with TRAA. See docs/THREE-NEW.md.
 import { BackSide, LinearMipmapLinearFilter } from 'three';
+import { initializeAreaLights } from './area-lights.js';
 import {
   MeshBasicNodeMaterial,
   PMREMGenerator,
@@ -338,6 +339,7 @@ export async function createThreeNewRenderer(
   renderer.shadowMap.enabled = true;
   configureRenderer(renderer, effects);
   await renderer.init();
+  initializeAreaLights();
 
   const releaseScene = prepareScene(setup, {
     createGradient: ({ center, edge }) => screenUV.distance(0.5).remap(0, 0.5).mix(color(center), color(edge)),
