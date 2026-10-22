@@ -34,3 +34,11 @@ export function browserAssetUrl(asset: string, examplesBase: string, assetsBase:
   if (asset.startsWith('@/')) throw new Error('Unsupported imported asset path: ' + asset);
   return examplesBase + asset;
 }
+
+/** GitHub raw serves LFS pointers; binary dependencies must use the pinned media endpoint. */
+export function browserDependencyUrl(url: string): string {
+  const prefix = 'https://raw.githubusercontent.com/ErfanMo77/gltf-research-scenes/';
+  return url.startsWith(prefix) && !url.split('?')[0]!.endsWith('.gltf')
+    ? url.replace('https://raw.githubusercontent.com/', 'https://media.githubusercontent.com/media/')
+    : url;
+}
