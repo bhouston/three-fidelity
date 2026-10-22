@@ -32,6 +32,9 @@
 	path = submodules/ldraw-parts-library
 	url = https://github.com/gkjohnson/ldraw-parts-library.git
 	ignore = dirty
+[submodule "submodules/gltf-research-scenes"]
+	path = submodules/gltf-research-scenes
+	url = https://github.com/ErfanMo77/gltf-research-scenes.git
 [submodule "submodules/three-dev"]
 	path = submodules/three-dev
 	url = https://github.com/bhouston/three.js.git

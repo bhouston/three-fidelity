@@ -13,15 +13,19 @@ describe('scene registry', () => {
     expect(() => getScene('nope')).toThrow(/Unknown scene/);
   });
 
-  it.each(listSceneNames().filter((name) => !name.startsWith('pt-')))('creates %s', async (name) => {
-    const definition = getScene(name);
-    const { scene, camera, effects } = await definition.create(createNodeSceneContext());
-    expect(camera.aspect).toBeCloseTo(definition.width / definition.height);
-    expect(effects.frames).toBeGreaterThan(0);
-    let meshes = 0;
-    scene.traverse((object) => {
-      if ((object as { isMesh?: boolean }).isMesh) meshes++;
-    });
-    expect(meshes).toBeGreaterThan(1);
-  });
+  // Large pinned model libraries are validated explicitly by the native asset scripts.
+  it.each(listSceneNames().filter((name) => !name.startsWith('pt-') && !name.startsWith('research-')))(
+    'creates %s',
+    async (name) => {
+      const definition = getScene(name);
+      const { scene, camera, effects } = await definition.create(createNodeSceneContext());
+      expect(camera.aspect).toBeCloseTo(definition.width / definition.height);
+      expect(effects.frames).toBeGreaterThan(0);
+      let meshes = 0;
+      scene.traverse((object) => {
+        if ((object as { isMesh?: boolean }).isMesh) meshes++;
+      });
+      expect(meshes).toBeGreaterThan(1);
+    },
+  );
 });

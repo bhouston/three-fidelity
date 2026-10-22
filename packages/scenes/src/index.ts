@@ -1,10 +1,12 @@
-import { browserAssetUrl } from './asset-paths.js';
+import { LoadingManager } from 'three';
+import { browserAssetUrl, browserDependencyUrl } from './asset-paths.js';
 import { loadBrowserLDraw, loadBrowserCollada } from './legacy-browser.js';
 import { pathtracerScenes } from './pathtracer/index.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { missingResearchEnvironments, researchScenes } from './research-scenes.js';
 import { gltfScenes } from './gltf-scenes.js';
 import { complexModelScenes } from './complex-models.js';
 import { higharcScenes } from './higharc.js';
@@ -29,6 +31,7 @@ const scenes = new Map<string, SceneDefinition>(
     ...ssrScenes,
     ...higharcScenes,
     ...gltfScenes,
+    ...researchScenes.filter((scene) => !missingResearchEnvironments.has(scene.name.slice('research-'.length))),
     ...complexModelScenes,
     ...giDiagnosticScenes,
     ...visibleWallScenes,
@@ -52,7 +55,7 @@ export function getScene(name: string): SceneDefinition {
 export function createBrowserSceneContext(baseUrl: string, assetsBaseUrl = '/suite-assets/'): SceneContext {
   const base = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   const dracoLoader = new DRACOLoader().setDecoderPath(`${base}jsm/libs/draco/`);
-  const loader = new GLTFLoader()
+  const loader = new GLTFLoader(new LoadingManager().setURLModifier(browserDependencyUrl))
     .setDRACOLoader(dracoLoader)
     .setKTX2Loader(new RGBAKTX2Loader().setTranscoderPath(`${base}jsm/libs/basis/`))
     .setMeshoptDecoder(MeshoptDecoder);

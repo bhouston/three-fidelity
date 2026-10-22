@@ -1,5 +1,9 @@
 /** Immutable asset revisions from the sibling suite. Browser models stay remote to keep Pages within its size limit. */
 export const assetRepositories = {
+  'gltf-research-scenes': {
+    repository: 'ErfanMo77/gltf-research-scenes',
+    revision: '2b9fc945d7016048fe7099d67de9024241714ff3',
+  },
   'glTF-Sample-Assets': {
     repository: 'KhronosGroup/glTF-Sample-Assets',
     revision: 'f36bfdabd1031c3cf6689a50570b8cdf3678b49c',
@@ -29,4 +33,12 @@ export function browserAssetUrl(asset: string, examplesBase: string, assetsBase:
   }
   if (asset.startsWith('@/')) throw new Error('Unsupported imported asset path: ' + asset);
   return examplesBase + asset;
+}
+
+/** GitHub raw serves LFS pointers; binary dependencies must use the pinned media endpoint. */
+export function browserDependencyUrl(url: string): string {
+  const prefix = 'https://raw.githubusercontent.com/ErfanMo77/gltf-research-scenes/';
+  return url.startsWith(prefix) && !url.split('?')[0]!.endsWith('.gltf')
+    ? url.replace('https://raw.githubusercontent.com/', 'https://media.githubusercontent.com/media/')
+    : url;
 }

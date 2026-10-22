@@ -3424,6 +3424,270 @@
         "width": 480,
         "height": 360
       }
+    },
+    {
+      "id": "research-bathroom",
+      "name": "Bathroom",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-bathroom2",
+      "name": "Bathroom2",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-bmw-m6",
+      "name": "Bmw M6",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 457,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-breakfast-room",
+      "name": "Breakfast Room",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-classroom",
+      "name": "Classroom",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-coffee-maker",
+      "name": "Coffee Maker",
+      "params": {},
+      "fidelity": {
+        "width": 512,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-cornell-box",
+      "name": "Cornell Box",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-cornell-caustic",
+      "name": "Cornell Caustic",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-dragon",
+      "name": "Dragon",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-glass-of-water",
+      "name": "Glass Of Water",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-house",
+      "name": "House",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-kitchen",
+      "name": "Kitchen",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-lamp",
+      "name": "Lamp",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-living-room",
+      "name": "Living Room",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-living-room-2",
+      "name": "Living Room 2",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-modern-hall",
+      "name": "Modern Hall",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-spaceship",
+      "name": "Spaceship",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-staircase",
+      "name": "Staircase",
+      "params": {},
+      "fidelity": {
+        "width": 360,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-veach-ajar",
+      "name": "Veach Ajar",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-veach-bidir",
+      "name": "Veach Bidir",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 640,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-veach-mis",
+      "name": "Veach Mis",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
+    },
+    {
+      "id": "research-classroom2",
+      "name": "Classroom2",
+      "params": {},
+      "fidelity": {
+        "width": 640,
+        "height": 360,
+        "frames": 128
+      },
+      "category": "Research scenes",
+      "tags": ["research"]
     }
   ],
   "performance": {
