@@ -7,17 +7,20 @@ import { hierarchyImageName, ssgiWorkExperiments } from '@three-fidelity/rendere
 import { listSceneNames } from '@three-fidelity/scenes';
 import yargs from 'yargs';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
-import { renderPath } from '../paths.js';
+import { renderPath, repoRoot } from '../paths.js';
 import type { RenderJob } from '../render-process.js';
 import { command } from './render.js';
+import { renderSuite } from 'fidelity-kit/render';
 
 vi.mock('node:child_process', () => ({ spawn: vi.fn() }));
+vi.mock('fidelity-kit/render', () => ({ renderSuite: vi.fn() }));
 
 const scenes = listSceneNames().slice(0, 2);
 let output: string;
 let jobs: RenderJob[];
 
 beforeEach(async () => {
+  vi.mocked(renderSuite).mockReset();
   output = await mkdtemp(path.join(os.tmpdir(), 'three-fidelity-missing-only-'));
   jobs = [];
   vi.mocked(spawn)
@@ -29,6 +32,45 @@ beforeEach(async () => {
       return child as ReturnType<typeof spawn>;
     });
   vi.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+test('browser rendering forwards missing-only with imported scene and renderer globs', async () => {
+  const previousCwd = process.cwd();
+  vi.mocked(renderSuite).mockImplementation(async () => {
+    expect(process.cwd()).toBe(path.resolve(repoRoot));
+  });
+  await yargs()
+    .command(command)
+    .exitProcess(false)
+    .parseAsync([
+      'render',
+      '--missing-only',
+      '--scenes',
+      'pt-gi-*',
+      '--renderers',
+      'three-gpu-pathtracer*,blender',
+      '--output',
+      output,
+    ]);
+  expect(renderSuite).toHaveBeenCalledWith(
+    expect.objectContaining({
+      missingOnly: true,
+      out: output,
+      scene: listSceneNames().filter((name) => name.startsWith('pt-gi-')),
+      renderer: ['three-gpu-pathtracer', 'blender', 'three-gpu-pathtracer-webgpu-experimental'],
+    }),
+  );
+  expect(spawn).not.toHaveBeenCalled();
+  expect(process.cwd()).toBe(previousCwd);
+});
+
+test('browser rendering restores the caller directory after capture failures', async () => {
+  const previousCwd = process.cwd();
+  vi.mocked(renderSuite).mockRejectedValueOnce(new Error('capture failed'));
+  await expect(
+    yargs().command(command).exitProcess(false).parseAsync(['render', '--scenes', 'pt-gi-basic']),
+  ).rejects.toThrow('capture failed');
+  expect(process.cwd()).toBe(previousCwd);
 });
 
 afterEach(async () => {
@@ -85,6 +127,15 @@ test('missing-only skips a complete set without starting any children', async ()
   await image(scenes[0]!, 'blender');
   await render('--missing-only', '--renderers', 'three-new-baseline,blender');
   expect(spawn).not.toHaveBeenCalled();
+});
+
+test('intentional black references require explicit native Blender selection', async () => {
+  await render('--allow-all-black', '--renderers', 'blender');
+  expect(jobs[0]!.allowAllBlack).toBe(true);
+  await expect(render('--allow-all-black')).rejects.toThrow('requires selecting only Blender');
+  await expect(
+    yargs().command(command).exitProcess(false).parseAsync(['render', '--allow-all-black', '--renderers', 'blender']),
+  ).rejects.toThrow('require --native');
 });
 
 test('full renderer names preserve variant and SSR debug output names', async () => {

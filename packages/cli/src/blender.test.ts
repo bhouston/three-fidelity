@@ -66,8 +66,9 @@ describe('Blender integration', () => {
       seed: 1,
       denoise: false,
       adaptiveThreshold: 0,
+      failAllBlack: true,
       unsupported: 'warn',
-      features: { areaLights: true, depthOfField: true, textureBackground: true },
+      features: { areaLights: true, depthOfField: true, textureBackground: true, screenSpacePrimitives: true },
       outputColorSpace: 'srgb',
       background: { type: 'color', color: [0, 0, 0] },
     });
@@ -77,6 +78,11 @@ describe('Blender integration', () => {
     adapter.renderScene.mockResolvedValue({ pixels: new Uint8Array(32) });
     await renderBlender(setup(), { ...options, noiseThreshold: 0.005 });
     expect(adapter.renderScene.mock.calls[0]![0]).toMatchObject({ samples: 16, adaptiveThreshold: 0.005 });
+  });
+  it('allows a known black reference only through an explicit capture option', async () => {
+    adapter.renderScene.mockResolvedValue({ pixels: new Uint8Array(32) });
+    await renderBlender(setup(), { ...options, allowAllBlack: true });
+    expect(adapter.renderScene.mock.calls[0]![0].failAllBlack).toBe(false);
   });
 
   it('preserves matching environment/background identity and parented camera world pose', async () => {
