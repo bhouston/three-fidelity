@@ -1,4 +1,5 @@
 import { PMREMGenerator, RenderPipeline, UnsignedByteType, WebGPURenderer } from 'three/webgpu';
+import { initializeAreaLights } from './area-lights.js';
 import {
   builtinGIContext,
   color,
@@ -28,6 +29,7 @@ export async function createVXGIRenderer(
   renderer.shadowMap.enabled = true;
   configureRenderer(renderer, effects);
   await renderer.init();
+  initializeAreaLights();
   const releaseScene = prepareScene(setup, {
     createGradient: ({ center, edge }) => screenUV.distance(0.5).remap(0, 0.5).mix(color(center), color(edge)),
     bakeEnvironment(environment) {
