@@ -37,7 +37,7 @@ export default defineConfig({
             return next();
           }
           if (
-            !/^\/(complex-scenes|environments|models)\//.test(asset) ||
+            !/^\/(complex-scenes|environments|research-environments|models)\//.test(asset) ||
             asset.includes('\\') ||
             asset.includes('\0') ||
             asset.split('/').includes('..')

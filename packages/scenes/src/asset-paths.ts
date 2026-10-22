@@ -1,5 +1,9 @@
 /** Immutable asset revisions from the sibling suite. Browser models stay remote to keep Pages within its size limit. */
 export const assetRepositories = {
+  'gltf-research-scenes': {
+    repository: 'ErfanMo77/gltf-research-scenes',
+    revision: '2b9fc945d7016048fe7099d67de9024241714ff3',
+  },
   'glTF-Sample-Assets': {
     repository: 'KhronosGroup/glTF-Sample-Assets',
     revision: 'f36bfdabd1031c3cf6689a50570b8cdf3678b49c',

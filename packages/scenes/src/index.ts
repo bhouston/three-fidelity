@@ -5,6 +5,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { researchScenes } from './research-scenes.js';
 import { gltfScenes } from './gltf-scenes.js';
 import { complexModelScenes } from './complex-models.js';
 import { higharcScenes } from './higharc.js';
@@ -29,6 +30,7 @@ const scenes = new Map<string, SceneDefinition>(
     ...ssrScenes,
     ...higharcScenes,
     ...gltfScenes,
+    ...researchScenes,
     ...complexModelScenes,
     ...giDiagnosticScenes,
     ...visibleWallScenes,

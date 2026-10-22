@@ -1,0 +1,421 @@
+[
+  {
+    "id": "bathroom",
+    "model": "scenes/bathroom/gltf/bathroom_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "bathroom2",
+    "model": "scenes/bathroom2/gltf/bathroom2_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "bmw-m6",
+    "model": "scenes/bmw-m6/gltf/bmw_m6_extended.gltf",
+    "width": 640,
+    "height": 457,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/sunflowers_equiarea.exr",
+        "pbrt_transform": [
+          0.17364817766693041, 0.0, -0.984807753012208, 0.0, -0.984807753012208, 0.0, -0.17364817766693041, 0.0, 0.0,
+          1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "breakfast-room",
+    "model": "scenes/breakfast-room/gltf/breakfast_room_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "distant",
+        "gltf": "metadata_only",
+        "radiance_rgb": [10.0, 10.0, 10.0],
+        "from": [0.88698, 0.288862, 0.360313],
+        "to": [0.0, 0.0, 0.0],
+        "pbrt_transform": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      },
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/Skydome.pfm",
+        "pbrt_transform": [
+          -0.992546151641322, 0.12186934340514748, 8.74228e-8, 0.0, -8.677116370570897e-8, 1.0654159234639527e-8, -1.0,
+          0.0, 0.12186934340514748, 0.992546151641322, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "classroom",
+    "model": "scenes/classroom/gltf/classroom_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "distant",
+        "gltf": "metadata_only",
+        "radiance_rgb": [10.0, 10.0, 10.0],
+        "from": [-0.865804, 0.416766, -0.276929],
+        "to": [0.0, 0.0, 0.0],
+        "pbrt_transform": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      },
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/Skydome.pfm",
+        "pbrt_transform": [
+          -1.0, 0.0, 8.74228e-8, 0.0, -8.74228e-8, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "coffee-maker",
+    "model": "scenes/coffee-maker/gltf/coffee_maker_extended.gltf",
+    "width": 512,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "cornell-box",
+    "model": "scenes/cornell-box/gltf/cornell_box_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "cornell-caustic",
+    "model": "scenes/cornell-caustic/gltf/cornell_caustic_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "dragon",
+    "model": "scenes/dragon/gltf/dragon_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "distant",
+        "gltf": "metadata_only",
+        "radiance_rgb": [8.0, 8.0, 8.0],
+        "from": [-0.18862, 0.692312, 0.69651],
+        "to": [0.0, 0.0, 0.0],
+        "pbrt_transform": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "glass-of-water",
+    "model": "scenes/glass-of-water/gltf/glass_of_water_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "house",
+    "model": "scenes/house/gltf/house_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/Skydome.pfm",
+        "pbrt_transform": [
+          -1.0, 0.0, 8.74228e-8, 0.0, -8.74228e-8, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      },
+      {
+        "pbrt": "distant",
+        "gltf": "metadata_only",
+        "radiance_rgb": [5.0, 5.0, 5.0],
+        "from": [-0.445695, 0.655031, -0.610156],
+        "to": [0.0, 0.0, 0.0],
+        "pbrt_transform": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "kitchen",
+    "model": "scenes/kitchen/gltf/kitchen_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "lamp",
+    "model": "scenes/lamp/gltf/lamp_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "01_Emitter",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [2.0, 2.0, 2.0],
+        "twosided": false
+      },
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "17_Emitter",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [5.0, 5.0, 5.0],
+        "twosided": false
+      },
+      {
+        "pbrt": "distant",
+        "gltf": "metadata_only",
+        "radiance_rgb": [1.0, 1.0, 1.0],
+        "from": [0.0, 0.804621, -0.593788],
+        "to": [0.0, 0.0, 0.0],
+        "pbrt_transform": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "living-room",
+    "model": "scenes/living-room/gltf/living_room_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/Sky 19.pfm",
+        "pbrt_transform": [
+          -1.0, 0.0, 8.74228e-8, 0.0, -8.74228e-8, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "living-room-2",
+    "model": "scenes/living-room-2/gltf/living_room_2_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "material-testball",
+    "model": "scenes/material-testball/gltf/material_testball_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/envmap.pfm",
+        "pbrt_transform": [
+          -0.386527, 0.0, 0.922278, 0.0, -0.922278, 0.0, -0.386527, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "modern-hall",
+    "model": "scenes/modern-hall/gltf/modern_hall_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [],
+    "media": [
+      {
+        "name": "green",
+        "type": "homogeneous",
+        "scale": 1.0,
+        "sigma_a": [0.5, 0.2, 0.4],
+        "sigma_s": [0.0, 0.0, 0.0],
+        "sigma_t": [0.5, 0.2, 0.4]
+      }
+    ]
+  },
+  {
+    "id": "pontiac-gto",
+    "model": "scenes/pontiac-gto/gltf/pontiac_gto_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/envmap.pfm",
+        "pbrt_transform": [
+          0.693251, 0.0, -0.720696, 0.0, 0.720696, 0.0, 0.693251, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "spaceship",
+    "model": "scenes/spaceship/gltf/spaceship_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "07_Black",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [20.0, 3.0, 3.0],
+        "twosided": false
+      },
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "18_diffuse_00",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [3.88628, 3.77255, 3.43137],
+        "twosided": false
+      },
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "88_diffuse_00",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [9.0, 9.0, 10.0],
+        "twosided": false
+      },
+      {
+        "pbrt": "diffuse area light",
+        "mesh": "89_diffuse_00",
+        "gltf": "emissive mesh + KHR_materials_emissive_strength",
+        "radiance_rgb": [9.0, 9.0, 10.0],
+        "twosided": false
+      },
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "radiance_rgb": [0.3, 0.3, 0.3],
+        "pbrt_transform": [
+          -1.0, 0.0, 8.74228e-8, 0.0, -8.74228e-8, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "staircase",
+    "model": "scenes/staircase/gltf/staircase_extended.gltf",
+    "width": 360,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "teapot",
+    "model": "scenes/teapot/gltf/teapot_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/envmap.pfm",
+        "pbrt_transform": [
+          -0.386527, 0.0, 0.922278, 0.0, -0.922278, 0.0, -0.386527, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "teapot-full",
+    "model": "scenes/teapot-full/gltf/teapot_full_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/envmap.pfm",
+        "pbrt_transform": [
+          -0.386527, 0.0, 0.922278, 0.0, -0.922278, 0.0, -0.386527, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": [
+      {
+        "name": "Tea",
+        "type": "homogeneous",
+        "scale": 1.0,
+        "sigma_a": [0.1486, 0.321, 0.736],
+        "sigma_s": [0.0, 0.0, 0.0],
+        "sigma_t": [0.1486, 0.321, 0.736]
+      }
+    ]
+  },
+  {
+    "id": "veach-ajar",
+    "model": "scenes/veach-ajar/gltf/veach_ajar_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "veach-bidir",
+    "model": "scenes/veach-bidir/gltf/veach_bidir_extended.gltf",
+    "width": 640,
+    "height": 640,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "veach-mis",
+    "model": "scenes/veach-mis/gltf/veach_mis_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  },
+  {
+    "id": "vintage-car",
+    "model": "scenes/vintage-car/gltf/vintage_car_extended.gltf",
+    "width": 640,
+    "height": 360,
+    "lights": [
+      {
+        "pbrt": "infinite",
+        "gltf": "metadata_only",
+        "source": "textures/envmap.pfm",
+        "pbrt_transform": [
+          -1.0, 0.0, 8.74228e-8, 0.0, -8.74228e-8, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
+        ]
+      }
+    ],
+    "media": []
+  },
+  {
+    "id": "classroom2",
+    "model": "scenes/classroom2/gltf/classroom2.glb",
+    "width": 640,
+    "height": 360,
+    "lights": [],
+    "media": []
+  }
+]
