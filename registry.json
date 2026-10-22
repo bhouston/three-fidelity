@@ -358,6 +358,196 @@
         "noiseThreshold": 0,
         "minSamples": 128
       }
+    },
+    {
+      "id": "three-dev-ssr-baseline",
+      "name": "Dev SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-baseline"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-normal-bias",
+      "name": "SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-normal-bias"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ray-length",
+      "name": "SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ray-length"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-mirror-bias-docs",
+      "name": "SSR comment only",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-mirror-bias-docs"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-baseline",
+      "name": "Dev GGX SSR baseline",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-baseline"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-normal-bias",
+      "name": "GGX SSR normal bias",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-normal-bias"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-ggx-ray-length",
+      "name": "GGX SSR grazing ray guard",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-ggx-ray-length"
+      },
+      "category": "SSR PR comparisons"
+    },
+    {
+      "id": "three-dev-ssr-dielectric-fresnel",
+      "name": "SSR dielectric Fresnel",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-dielectric-fresnel"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-dev-ssr-background-depth",
+      "name": "SSR cleared-depth rejection",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-background-depth"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-filter",
+      "name": "New SSR without filter",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-no-filter"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-hit-specular",
+      "name": "New SSR without hit redirection",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-no-hit-specular"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-back-depth",
+      "name": "New SSR without back depth",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-no-back-depth"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-no-hiz",
+      "name": "New SSR dense traversal",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-no-hiz"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-biased-lobe",
+      "name": "New SSR biased lobe",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-biased-lobe"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-short-rays",
+      "name": "New SSR short rays",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-short-rays"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-distance-fade",
+      "name": "New SSR artistic fade",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-distance-fade"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-additive-env",
+      "name": "New SSR additive environment",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-additive-env"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-new-ssr-capped-march",
+      "name": "New SSR capped dense march",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-new-ssr-capped-march"
+      },
+      "category": "SSR contribution study"
+    },
+    {
+      "id": "three-dev-ssr-back-depth",
+      "name": "Dev SSR back-depth hit validation",
+      "reference": false,
+      "enabled": false,
+      "params": {
+        "renderer": "three-dev-ssr-background-depth"
+      },
+      "category": "SSR contribution study"
     }
   ],
   "scenes": [
@@ -4764,6 +4954,51 @@
         "three-new-vpl-shadow-maps",
         "vxgi",
         "vxgi-light-bake"
+      ]
+    },
+    {
+      "id": "ssr-pr-mirror",
+      "name": "SSR fixes (mirror)",
+      "ref": "three-gpu-pathtracer",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-baseline",
+        "three-dev-ssr-normal-bias",
+        "three-dev-ssr-ray-length",
+        "three-dev-ssr-mirror-bias-docs"
+      ]
+    },
+    {
+      "id": "ssr-pr-ggx",
+      "name": "SSR fixes (GGX)",
+      "ref": "three-gpu-pathtracer",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-ggx-baseline",
+        "three-dev-ssr-ggx-normal-bias",
+        "three-dev-ssr-ggx-ray-length"
+      ]
+    },
+    {
+      "id": "ssr-contributions",
+      "name": "SSR contributions",
+      "ref": "three-gpu-pathtracer",
+      "renderers": [
+        "three-current",
+        "three-dev-ssr-baseline",
+        "three-new",
+        "three-dev-ssr-dielectric-fresnel",
+        "three-dev-ssr-background-depth",
+        "three-new-ssr-no-filter",
+        "three-new-ssr-no-hit-specular",
+        "three-new-ssr-no-back-depth",
+        "three-new-ssr-no-hiz",
+        "three-new-ssr-biased-lobe",
+        "three-new-ssr-short-rays",
+        "three-new-ssr-distance-fade",
+        "three-new-ssr-additive-env",
+        "three-new-ssr-capped-march",
+        "three-dev-ssr-back-depth"
       ]
     }
   ]

@@ -2,6 +2,7 @@
 // solid-angle SSGI (vendored ssgi-fast/SSGINode.js) and real-time stochastic SSR (vendored ssr/NewSSRNode.js),
 // resolved with TRAA. See docs/THREE-NEW.md.
 import { BackSide, LinearMipmapLinearFilter } from 'three';
+import { initializeAreaLights } from './area-lights.js';
 import {
   MeshBasicNodeMaterial,
   PMREMGenerator,
@@ -16,6 +17,7 @@ import {
   color,
   context,
   float,
+  Fn,
   metalness,
   mix,
   mrt,
@@ -45,7 +47,7 @@ import { bilateralUpsample } from './ssgi-fast/bilateralUpsample.js';
 import { newSSR } from './ssr/NewSSRNode.js';
 import type { SceneInstance } from '@three-fidelity/scenes';
 import { ssgiWorkExperiments } from './types.js';
-import type { LiveRenderer, RendererOptions, SSGIWorkExperiment } from './types.js';
+import type { LiveRenderer, RendererOptions, SSGIWorkExperiment, SSRContribution } from './types.js';
 import { VirtualPointLightGI } from './vpl/VirtualPointLightGI.js';
 import { ShadowMapVPL } from './vpl/ShadowMapVPL.js';
 import { ProgressiveLightBake } from './light-bake/ProgressiveLightBake.js';
@@ -84,6 +86,7 @@ function createPipeline(
   useProbes = false,
   boxRadiance: AnyNode = null,
   mirrorVelocity = false,
+  contribution: SSRContribution = 'full',
 ): RenderPipeline {
   const { scene, camera, effects } = setup;
   const resolutionScale = effects.resolutionScale ?? 1;
@@ -236,7 +239,7 @@ function createPipeline(
       // rendered frame, converged by NewSSRNode's own spatial + temporal filter
       reflectNonMetals: true,
       stochastic: true,
-      temporalFilter: true,
+      temporalFilter: contribution !== 'no-filter',
       temporalProfile:
         ssrTemporalProfile ??
         (hierarchyExperiment === 'ssr-temporal-validated'
@@ -246,17 +249,20 @@ function createPipeline(
             : 'baseline'),
       velocityNode: prePassVelocity,
       debugView: ssrDebug ?? null,
-      backDepthNode: backPass.getTextureNode('depth'),
+      backDepthNode: contribution === 'no-back-depth' ? null : backPass.getTextureNode('depth'),
       hitMaterialNode: prePass.getTextureNode('metalRoughness'),
-      hitSpecularNode: prePass.getTextureNode('specular'),
+      hitSpecularNode: contribution === 'no-hit-specular' ? null : prePass.getTextureNode('specular'),
       ...SSR_OPTIONS,
+      hiZ: contribution !== 'no-hiz' && contribution !== 'capped-march',
+      maxMarchSteps: contribution === 'capped-march' ? 32 : null,
       tightHiZ,
       radianceMipNode: ssrRadianceMips ? ssrRadiance : null,
     });
     if (scene.environment) ssrPass.environmentIntensity.value = scene.environmentIntensity;
     // NewSSRNode drops the fork's distance-fade/hit-rejection use of maxDistance in radiance mode, so maxDistance
     // is only a ray-length budget: a large, scene-independent value instead of the scene's artistic cutoff
-    ssrPass.maxDistance.value = camera.far * 2;
+    ssrPass.maxDistance.value = contribution === 'short-rays' ? params.maxDistance : camera.far * 2;
+    if (contribution === 'distance-fade') ssrPass.researchDistanceFade = float(params.maxDistance);
     ssrPass.quality.value = SSR_OPTIONS.quality;
     if (params.blurQuality !== undefined) ssrPass.blurQuality = params.blurQuality;
     if (params.intensity !== undefined) ssrPass.intensity.value = params.intensity;
@@ -265,7 +271,7 @@ function createPipeline(
     ssrPass.resolutionScale = resolutionScale;
     // unbiased: full VNDF lobe, no luminance clamp, no screen-edge fade (a hit is a hit; rays leaving the screen
     // fall back to the environment), fresh samples every frame
-    ssrPass.mirrorBias.value = 0;
+    ssrPass.mirrorBias.value = contribution === 'biased-lobe' ? 0.5 : 0;
     ssrPass.maxLuminance.value = 1e9;
     ssrPass.screenEdgeFade.value = 0;
     ssrPass.useTemporalFiltering = true;
@@ -290,7 +296,12 @@ function createPipeline(
     : !reflections
       ? null
       : (context as AnyNode)(null, {
-          getRadiance: (inputNode: AnyNode) => (inputNode !== null ? inputNode.add(reflections) : reflections),
+          getRadiance: (inputNode: AnyNode) =>
+            contribution === 'additive-env'
+              ? Fn((_inputs: AnyNode, builder: AnyNode) => builder.context.radiance.add(reflections))()
+              : inputNode !== null
+                ? inputNode.add(reflections)
+                : reflections,
         });
   if (giPass) {
     const aoSignal = temporal ? temporalDenoise(giPass.getAONode(), giResolutionScale) : giPass.getAONode();
@@ -329,6 +340,7 @@ export async function createThreeNewRenderer(
   sceneSetup: SceneInstance,
   { width, height, trackTimestamp = false, ssrDebug, hierarchyExperiment, ssrTemporalProfile }: RendererOptions,
   probeMode?: 'light-probe' | 'light-probe-ddgi' | 'light-bake' | 'vpl' | 'vpl-shadow-maps',
+  contribution: SSRContribution = 'full',
 ): Promise<LiveRenderer> {
   const useProbes = probeMode !== undefined;
   const isVpl = probeMode?.startsWith('vpl') ?? false;
@@ -338,6 +350,7 @@ export async function createThreeNewRenderer(
   renderer.shadowMap.enabled = true;
   configureRenderer(renderer, effects);
   await renderer.init();
+  initializeAreaLights();
 
   const releaseScene = prepareScene(setup, {
     createGradient: ({ center, edge }) => screenUV.distance(0.5).remap(0, 0.5).mix(color(center), color(edge)),
@@ -364,7 +377,17 @@ export async function createThreeNewRenderer(
     if (probeMode === 'light-bake' || isVpl) baker = createSurfaceLighting();
     if (useProbes && !baker && effects.ssgi)
       releaseProbes = await bakeProbeGrid(renderer, setup.scene, probeMode === 'light-probe-ddgi');
-    renderPipeline = createPipeline(renderer, setup, ssrDebug, hierarchyExperiment, ssrTemporalProfile, useProbes);
+    renderPipeline = createPipeline(
+      renderer,
+      setup,
+      ssrDebug,
+      hierarchyExperiment,
+      ssrTemporalProfile,
+      useProbes,
+      null,
+      false,
+      contribution,
+    );
   } catch (error) {
     baker?.dispose();
     releaseProbes?.();

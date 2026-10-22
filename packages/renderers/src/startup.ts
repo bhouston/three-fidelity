@@ -1,5 +1,6 @@
 import { Renderer } from 'three/webgpu';
 import { Renderer as StockRenderer } from 'three-r186/webgpu';
+import { Renderer as DevRenderer } from 'three-dev/webgpu';
 import { installShaderStartupProfiler } from './startup/ShaderStartupProfiler.js';
 import type { RendererName } from './types.js';
 
@@ -53,6 +54,10 @@ export interface RendererStartupProfiler {
 export function createRendererStartupProfiler(name: RendererName): RendererStartupProfiler | undefined {
   if (name === 'three-gpu-pathtracer') return undefined; // WebGL exposes no node-builder/WebGPU breakdown.
   return installShaderStartupProfiler({
-    RendererClass: name === 'three-current' ? StockRenderer : Renderer,
+    RendererClass: name.startsWith('three-dev-ssr-')
+      ? DevRenderer
+      : name === 'three-current'
+        ? StockRenderer
+        : Renderer,
   }) as unknown as RendererStartupProfiler;
 }

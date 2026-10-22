@@ -117,10 +117,15 @@ export const command = defineCommand({
         default: false,
         describe: 'Skip existing images and render only missing outputs',
       })
+      .option('allow-all-black', {
+        type: 'boolean',
+        default: false,
+        describe: 'Accept intentionally black Blender references (requires --native --renderers blender)',
+      })
       .option('output', { type: 'string', default: resultsDir, describe: 'Results directory' }),
   handler: async (argv) => {
     if (!argv.native) {
-      if (argv.motion || argv.ssrDebug || argv.width || argv.height)
+      if (argv.motion || argv.ssrDebug || argv.width || argv.height || argv.allowAllBlack)
         throw new Error('Native diagnostic options require --native');
       const out = path.resolve(argv.output);
       const previousCwd = process.cwd();
@@ -167,6 +172,8 @@ export const command = defineCommand({
       argv.renderers ?? '*',
       'renderer',
     ).map((name) => profilesByName.get(name)!);
+    if (argv.allowAllBlack && profiles.some((profile) => profile.renderer !== 'blender'))
+      throw new Error('--allow-all-black requires selecting only Blender');
     let failed = false;
     const pending: { name: string; job: RenderJob }[] = [];
     // one child process per renderer and scene: dawn and ANGLE don't share a process reliably, and GPU state leaked
@@ -185,6 +192,7 @@ export const command = defineCommand({
           noiseThreshold: argv.noiseThreshold,
           minSamples: argv.minSamples,
           cyclesNoiseThreshold: argv.cyclesNoiseThreshold,
+          allowAllBlack: argv.allowAllBlack,
           blenderDevice: argv.blenderDevice,
           motion: parseMotion(argv.motion, argv.motionObject),
           ssrDebug: argv.ssrDebug,

@@ -98,8 +98,8 @@ importers:
         specifier: workspace:*
         version: link:../../submodules/three.js
       webgpu:
-        specifier: ^0.6.1
-        version: 0.6.1
+        specifier: ^0.6.2
+        version: 0.6.2
       yargs:
         specifier: ^18.0.0
         version: 18.2.0
@@ -174,6 +174,9 @@ importers:
       three:
         specifier: workspace:*
         version: link:../../submodules/three.js
+      three-dev:
+        specifier: link:../../submodules/three-dev
+        version: link:../../submodules/three-dev
       three-gpu-pathtracer:
         specifier: workspace:*
         version: link:../../submodules/three-gpu-pathtracer
@@ -5026,8 +5029,8 @@ packages:
   webdriver-bidi-protocol@0.4.3:
     resolution: {integrity: sha512-uuN0goWfxP22B7J/uAgBpOYNPttC+XVseYE+rSY5+rQ+YBeVz/VORw8WbmLVcqW78zNg5A4qnjNXYUWR3il2ig==}
 
-  webgpu@0.6.1:
-    resolution: {integrity: sha512-T+B65/j2jhyFjbWHsVZ4TJw0nk0RVT27lG+nL3V5IIYMsvuVYKYOUli/yJhMpwvXAwqVPZehakWvTjxk+mK8LQ==}
+  webgpu@0.6.2:
+    resolution: {integrity: sha512-3L4GfmqJLvYUIEWJngEQY+2HQiUlAFkg8+P8NDDj3Xx5hHHIFO/r8JW+ynfqBj7kHN4mbnwO74uB+lrRtLhp4Q==}
 
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
@@ -9802,7 +9805,7 @@ snapshots:
 
   webdriver-bidi-protocol@0.4.3: {}
 
-  webgpu@0.6.1:
+  webgpu@0.6.2:
     dependencies:
       '@webgpu/types': 0.1.74
       debug: 4.4.3

@@ -2,6 +2,7 @@ import type { SceneInstance } from '@three-fidelity/scenes';
 import { createRenderer as createPathTracerRenderer } from 'fidelity-kit-three-gpu-pathtracer';
 import { createWebGPUPathTracerRenderer } from './pathtracer-webgpu.js';
 import { createCurrentRenderer } from './three-current.js';
+import { createDevSSRRenderer } from './three-dev-ssr.js';
 import { createVXGIRenderer } from './vxgi.js';
 import { createVXGILightBakeRenderer } from './vxgi-light-bake.js';
 import { createThreeNewRenderer } from './three-new.js';
@@ -68,6 +69,44 @@ export function createRenderer(
     });
   };
   switch (name) {
+    case 'three-new-ssr-short-rays':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'short-rays'));
+    case 'three-new-ssr-distance-fade':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'distance-fade'));
+    case 'three-new-ssr-additive-env':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'additive-env'));
+    case 'three-new-ssr-capped-march':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'capped-march'));
+    case 'three-dev-ssr-dielectric-fresnel':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'dielectric-fresnel'));
+    case 'three-dev-ssr-back-depth':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'back-depth'));
+    case 'three-dev-ssr-background-depth':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'background-depth'));
+    case 'three-new-ssr-no-filter':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-filter'));
+    case 'three-new-ssr-no-hit-specular':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-hit-specular'));
+    case 'three-new-ssr-no-back-depth':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-back-depth'));
+    case 'three-new-ssr-no-hiz':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'no-hiz'));
+    case 'three-new-ssr-biased-lobe':
+      return instrument(createThreeNewRenderer(canvas, setup, options, undefined, 'biased-lobe'));
+    case 'three-dev-ssr-ggx-baseline':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'baseline', true));
+    case 'three-dev-ssr-ggx-normal-bias':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'normal-bias', true));
+    case 'three-dev-ssr-ggx-ray-length':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'ray-length', true));
+    case 'three-dev-ssr-baseline':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'baseline'));
+    case 'three-dev-ssr-normal-bias':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'normal-bias'));
+    case 'three-dev-ssr-ray-length':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'ray-length'));
+    case 'three-dev-ssr-mirror-bias-docs':
+      return instrument(createDevSSRRenderer(canvas, setup, options, 'mirror-bias-docs'));
     case 'three-gpu-pathtracer-webgpu-experimental':
       return instrument(createWebGPUPathTracerRenderer(canvas, setup, options));
     case 'vxgi-light-bake':

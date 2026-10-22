@@ -1,5 +1,5 @@
 // Headless WebGPU (dawn `webgpu` package) with a minimal canvas, ported from vitest-environment-webgpu-node.
-import { requireHardwareGPU } from './hardware.js';
+import { requireHardwareGPU, hardwareBufferLimits } from './hardware.js';
 import { create, globals } from 'webgpu';
 
 const COPY_SRC = 0x01;
@@ -141,6 +141,22 @@ export function install(): void {
         ? [adapter.info.vendor, adapter.info.architecture, adapter.info.device, adapter.info.description].join(' ')
         : '',
     );
+    if (adapter) {
+      const requestDevice = adapter.requestDevice.bind(adapter);
+      adapter.requestDevice = async (descriptor = {}) => {
+        const device = await requestDevice({
+          ...descriptor,
+          requiredLimits: hardwareBufferLimits(adapter.limits, descriptor.requiredLimits),
+        });
+        device.addEventListener('uncapturederror', (event) => {
+          throw new Error('Native WebGPU capture failed: ' + event.error.message);
+        });
+        void device.lost.then((info) => {
+          if (info.reason !== 'destroyed') throw new Error('Native WebGPU device lost: ' + info.message);
+        });
+        return device;
+      };
+    }
     return adapter;
   };
   Object.defineProperty(globalThis.navigator, 'gpu', {

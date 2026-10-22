@@ -27,7 +27,7 @@
     "fidelity-kit-three-gpu-pathtracer": "workspace:*",
     "sharp": "^0.35.5",
     "three": "workspace:*",
-    "webgpu": "^0.6.1",
+    "webgpu": "^0.6.2",
     "yargs": "^18.0.0",
     "yargs-file-commands": "^2.1.0"
   },

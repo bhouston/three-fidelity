@@ -18,6 +18,8 @@ export interface BlenderRenderOptions {
   /** Headless WebGL canvas, used only when procedural lighting needs baking. */
   canvas: HTMLCanvasElement;
   captureLane?: 'cpu' | 'gpu';
+  /** Explicit opt-in for fixtures whose faithful Cycles output is intentionally black. */
+  allowAllBlack?: boolean;
 }
 
 /** Returns opaque sRGB RGBA8, top row first. Unsupported features fail instead of silently changing a reference. */
@@ -67,6 +69,7 @@ export async function renderBlender(setup: SceneInstance, options: BlenderRender
       seed: 1,
       denoise: false,
       adaptiveThreshold: options.noiseThreshold ?? 0,
+      failAllBlack: !options.allowAllBlack,
       ...outputSettings({
         toneMapping: setup.effects.toneMapping,
         toneMappingExposure: setup.effects.toneMappingExposure,
@@ -81,7 +84,7 @@ export async function renderBlender(setup: SceneInstance, options: BlenderRender
         : scene.background === null
           ? { type: 'color', color: [0, 0, 0] }
           : undefined,
-      features: { areaLights: true, depthOfField: true, textureBackground: true },
+      features: { areaLights: true, depthOfField: true, textureBackground: true, screenSpacePrimitives: true },
       unsupported: 'warn',
       onDiagnostic: (message) => {
         // The reference pathtracers also ignore ambient lights and finite punctual-light cutoffs.
