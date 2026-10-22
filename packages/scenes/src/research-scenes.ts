@@ -104,7 +104,21 @@ export const researchScenes: SceneDefinition[] = definitions.map((definition) =>
       scene,
       camera,
       target,
-      effects: { temporalDenoise: true, toneMapping: ACESFilmicToneMapping, toneMappingExposure: 1, frames: 128 },
+      effects: {
+        ssgi: {
+          sliceCount: 4,
+          stepCount: 16,
+          radius: extent * 0.1,
+          thickness: extent * 0.005,
+          giIntensity: (Math.PI * Math.PI) / 2,
+          useScreenSpaceSampling: false,
+        },
+        ssr: { maxDistance: extent, thickness: extent * 0.005 },
+        temporalDenoise: true,
+        toneMapping: ACESFilmicToneMapping,
+        toneMappingExposure: 1,
+        frames: 128,
+      },
     };
   },
 }));
