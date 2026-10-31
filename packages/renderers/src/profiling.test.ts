@@ -42,6 +42,7 @@ it('associates GPU query intervals with logical frames, sums repeated passes, an
       return 4;
     },
   };
+  // oxlint-disable-next-line typescript/unbound-method -- asserting the monkey-patched method identity
   const originalRender = renderer.render;
   const profiler = createWebGPUProfiler(renderer);
   profiler.beginFrame(10);
@@ -53,6 +54,7 @@ it('associates GPU query intervals with logical frames, sums repeated passes, an
   expect(samples).toContainEqual({ frame: 10, metric: 'gpu.pass-sum', value: 4 });
   expect(await profiler.resolve()).toEqual([]);
   profiler.dispose();
+  // oxlint-disable-next-line typescript/unbound-method -- asserting the monkey-patched method identity
   expect(renderer.render).toBe(originalRender);
 });
 

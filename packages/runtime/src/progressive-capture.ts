@@ -15,7 +15,7 @@ export interface ProgressiveOptions {
   yield(): Promise<void>;
   signal?: AbortSignal;
   stallTimeoutMs?: number;
-  now?(): number;
+  now?: () => number;
 }
 /** Capture policy shared by browser and native hosts. Never used to time throughput. */
 export async function captureProgressive(session: ProgressiveSession, options: ProgressiveOptions) {

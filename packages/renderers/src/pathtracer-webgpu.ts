@@ -151,7 +151,7 @@ export async function createWebGPUPathTracerRenderer(
     dispose() {
       pathTracer.dispose();
       environmentTexture?.dispose();
-      renderer.dispose();
+      void renderer.dispose();
     },
   };
 

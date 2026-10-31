@@ -117,10 +117,15 @@ function fixture() {
     }
   }
   const original = {
+    // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
     init: Renderer.prototype.init,
+    // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
     shaderModule: Device.prototype.createShaderModule,
+    // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
     pipeline: Device.prototype.createRenderPipeline,
+    // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
     pipelineAsync: Device.prototype.createRenderPipelineAsync,
+    // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
     queueDone: Queue.prototype.onSubmittedWorkDone,
   };
   const profiler = installShaderStartupProfiler({
@@ -151,7 +156,9 @@ function fixture() {
 test('accounts actual builder phases, links source modules, snapshots pass names, and restores hooks', async () => {
   const f = fixture();
   const builder = new f.Builder();
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   const originalBuild = builder.build;
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   const originalProgram = f.renderer.backend.createProgram;
   let callbacks = 0;
   const previous = () => {
@@ -194,13 +201,20 @@ test('accounts actual builder phases, links source modules, snapshots pass names
   } finally {
     f.profiler.restore();
   }
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(builder.build, originalBuild);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.renderer.backend.createProgram, originalProgram);
   assert.equal(f.renderer.debug.onNodeBuilderCreated, previous);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.Renderer.prototype.init, f.original.init);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.Device.prototype.createShaderModule, f.original.shaderModule);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.Device.prototype.createRenderPipeline, f.original.pipeline);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.Device.prototype.createRenderPipelineAsync, f.original.pipelineAsync);
+  // oxlint-disable-next-line typescript/unbound-method -- asserting identity of patched prototype methods
   assert.equal(f.Queue.prototype.onSubmittedWorkDone, f.original.queueDone);
   f.profiler.restore();
 });
@@ -254,7 +268,7 @@ test('excludes explicit async builder yields and marks uninstrumented default sc
     assert.equal(first.yieldMs, 7);
     assert.equal(first.exclusiveMs.setup, 2);
     assert.equal(
-      Object.values(first.exclusiveMs).reduce((a: number, b: number) => a + b, 0),
+      Object.values(first.exclusiveMs).reduce((a: number, b) => a + Number(b), 0),
       16,
     );
     assert.equal(report.builders[1].builds[0].defaultYieldIncluded, true);

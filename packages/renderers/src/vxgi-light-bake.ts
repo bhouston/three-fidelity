@@ -92,7 +92,7 @@ export async function createVXGILightBakeRenderer(
     }
   } catch (error) {
     restore();
-    renderer.dispose();
+    void renderer.dispose();
     throw error;
   } finally {
     volume.dispose();

@@ -8,7 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import manifest from '../migration/pathtracer-history.json' with { type: 'json' };
 import { legacyDestination } from './legacy-links.mjs';
-test('maps every source scene and renderer while preserving output, view and comparison options', () => {
+await test('maps every source scene and renderer while preserving output, view and comparison options', () => {
   for (const scene of manifest.sceneMappings)
     for (const [source, canonical] of Object.entries(manifest.rendererMappings)) {
       const old = new URL('https://old.invalid/?output=beauty&zoom=2');
@@ -25,7 +25,7 @@ test('maps every source scene and renderer while preserving output, view and com
       assert.equal(next.hash, '#vs-' + canonical);
     }
 });
-test('defaults the old landing page to imported path-tracer comparisons and maps group selection', () => {
+await test('defaults the old landing page to imported path-tracer comparisons and maps group selection', () => {
   const next = new URL(
     legacyDestination('https://old.invalid/?renderers=webgpu-new,blender', 'https://new.invalid/', manifest),
   );
@@ -33,7 +33,7 @@ test('defaults the old landing page to imported path-tracer comparisons and maps
   assert.equal(next.searchParams.get('tags'), 'pathtracer-import');
   assert.equal(next.searchParams.get('view'), 'fidelity');
 });
-test('preserves an explicit empty renderer selection and unknown legacy fields', () => {
+await test('preserves an explicit empty renderer selection and unknown legacy fields', () => {
   const next = new URL(
     legacyDestination('https://old.invalid/?renderers=&scene=unknown&view=live', 'https://new.invalid/', manifest),
   );
@@ -42,7 +42,7 @@ test('preserves an explicit empty renderer selection and unknown legacy fields',
   assert.equal(next.searchParams.get('view'), 'live');
 });
 
-test('generated redirect executes correctly and preserves original image URLs', async () => {
+await test('generated redirect executes correctly and preserves original image URLs', async () => {
   const out = await mkdtemp(join(tmpdir(), 'fidelity-redirect-'));
   try {
     execFileSync(process.execPath, [

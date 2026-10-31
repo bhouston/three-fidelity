@@ -54,6 +54,7 @@ export async function createPerformanceSession(
     const navigatorGPU = (
       navigator as unknown as { gpu?: { requestAdapter(...args: unknown[]): Promise<{ info?: AdapterInfo } | null> } }
     ).gpu;
+    // oxlint-disable-next-line typescript/unbound-method -- patched on navigator.gpu and invoked via .apply
     const requestAdapter = navigatorGPU?.requestAdapter;
     let adapterInfo: AdapterInfo | undefined;
     if (navigatorGPU && requestAdapter)

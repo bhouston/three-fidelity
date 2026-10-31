@@ -15,6 +15,7 @@ import { renderSuite } from 'fidelity-kit/render';
 vi.mock('node:child_process', () => ({ spawn: vi.fn() }));
 vi.mock('fidelity-kit/render', () => ({ renderSuite: vi.fn() }));
 
+const byString = (a: unknown, b: unknown) => (String(a) < String(b) ? -1 : String(a) > String(b) ? 1 : 0);
 const scenes = listSceneNames().slice(0, 2);
 let output: string;
 let jobs: RenderJob[];
@@ -103,12 +104,12 @@ async function render(...args: string[]): Promise<void> {
 test('missing-only skips existing scene/renderer pairs before spawning a child', async () => {
   const file = await image(scenes[0]!, 'three-new');
   await render('--missing-only', '--scenes', scenes.join(','), '--renderers', 'three-new-baseline,blender');
-  expect(jobs.map((job) => [job.scenes[0], job.renderer]).toSorted()).toEqual(
+  expect(jobs.map((job) => [job.scenes[0], job.renderer]).toSorted(byString)).toEqual(
     [
       [scenes[1], 'three-new'],
       [scenes[0], 'blender'],
       [scenes[1], 'blender'],
-    ].toSorted(),
+    ].toSorted(byString),
   );
   expect(await readFile(file, 'utf8')).toBe('existing image');
   expect(console.log).toHaveBeenCalledWith(expect.stringContaining('skipped'));
@@ -206,7 +207,7 @@ test('default renderer selection excludes experimental and disabled configuratio
 
 test('renderer globs and comma-separated names select complete configurations once', async () => {
   await render('--renderers', 'three-new-*,three-new-hierarchy-combined,blender');
-  expect(jobs.map((job) => [job.renderer, job.hierarchyExperiment]).toSorted()).toEqual(
+  expect(jobs.map((job) => [job.renderer, job.hierarchyExperiment]).toSorted(byString)).toEqual(
     [
       ['three-new', 'baseline'],
       ['three-new', 'ssr-hiz-tight'],
@@ -233,7 +234,7 @@ test('renderer globs and comma-separated names select complete configurations on
       ['three-new-light-probe', undefined],
       ['three-new-light-probe-ddgi', undefined],
       ['blender', undefined],
-    ].toSorted(),
+    ].toSorted(byString),
   );
 });
 

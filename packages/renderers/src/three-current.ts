@@ -196,7 +196,7 @@ export async function createCurrentRenderer(
     dispose() {
       renderPipeline.dispose();
       releaseScene();
-      renderer.dispose();
+      void renderer.dispose();
     },
   };
   handle.setSize(width, height);
