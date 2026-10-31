@@ -97,7 +97,7 @@ try {
     process.env.CHROME_EXECUTABLE ??
     (process.platform === 'darwin'
       ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-      : puppeteer.executablePath());
+      : await puppeteer.executablePath());
   browser = await puppeteer.launch({
     headless: !process.env.DISPLAY,
     dumpio: process.env.CI === 'true',
