@@ -218,7 +218,7 @@ export async function createDevSSRRenderer(
     dispose() {
       renderPipeline.dispose();
       releaseScene();
-      renderer.dispose();
+      void renderer.dispose();
     },
   };
   handle.setSize(width, height);

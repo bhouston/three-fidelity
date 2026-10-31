@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { listSceneNames } from '../packages/scenes/dist/index.js';
 import { batchTasks } from './dockergrid-batch.mjs';
 
-test('full sweep covers every example once per engine and uses native resolution', () => {
+await test('full sweep covers every example once per engine and uses native resolution', () => {
   const tasks = batchTasks();
   assert.equal(tasks.length, listSceneNames().length * 3);
   assert.equal(new Set(tasks.map((t) => `${t.scene}/${t.renderer}`)).size, tasks.length);
@@ -23,7 +23,7 @@ test('full sweep covers every example once per engine and uses native resolution
   }
 });
 
-test('CLI glob selection and sampling overrides produce one task per selected pair', () => {
+await test('CLI glob selection and sampling overrides produce one task per selected pair', () => {
   const tasks = batchTasks({
     scenes: 'pt-gi-room-*',
     renderers: 'blender',
@@ -45,7 +45,7 @@ test('CLI glob selection and sampling overrides produce one task per selected pa
   );
 });
 
-test('bad selections and sampling values fail before submission', () => {
+await test('bad selections and sampling values fail before submission', () => {
   for (const options of [
     { scenes: 'missing' },
     { renderers: 'missing' },
@@ -60,7 +60,7 @@ test('bad selections and sampling values fail before submission', () => {
   }
 });
 
-test('command stdout is directly usable as farm --params JSON', () => {
+await test('command stdout is directly usable as farm --params JSON', () => {
   const stdout = execFileSync(
     process.execPath,
     [

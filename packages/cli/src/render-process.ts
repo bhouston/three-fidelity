@@ -86,7 +86,6 @@ async function main(job: RenderJob): Promise<void> {
 
   async function render(name: string): Promise<void> {
     const definition = getScene(name);
-    const { create } = definition;
     const width = job.width ?? definition.width;
     const height = job.height ?? definition.height;
     if (![width, height].every((size) => Number.isInteger(size) && size > 0)) {
@@ -94,7 +93,7 @@ async function main(job: RenderJob): Promise<void> {
     }
     const start = performance.now();
     seedRandom(); // before the scene and renderer draw any random numbers
-    const setup = await create(ctx);
+    const setup = await definition.create(ctx);
     if (job.renderer === 'blender') {
       try {
         if (setup.environment && job.captureLane === 'cpu')

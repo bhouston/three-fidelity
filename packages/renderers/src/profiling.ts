@@ -42,8 +42,11 @@ export function createWebGPUProfiler(renderer: TimestampRenderer): PipelineProfi
   let name = '';
   let invalidSamples = 0;
   const backend = renderer.backend;
+  // oxlint-disable-next-line typescript/unbound-method -- monkey-patched renderer methods, invoked via .call
   const originalUpdate = backend.updateTimeStampUID;
+  // oxlint-disable-next-line typescript/unbound-method -- monkey-patched renderer methods, invoked via .call
   const originalRender = renderer.render;
+  // oxlint-disable-next-line typescript/unbound-method -- monkey-patched renderer methods, invoked via .call
   const originalCompute = renderer.compute;
   backend.updateTimeStampUID = function (context) {
     originalUpdate.call(backend, context);

@@ -143,6 +143,6 @@ export function createRenderer(
     case 'three-new':
       return instrument(createThreeNewRenderer(canvas, setup, options));
     default:
-      throw new Error(`Unknown renderer "${name}"`);
+      throw new Error(`Unknown renderer "${String(name)}"`);
   }
 }

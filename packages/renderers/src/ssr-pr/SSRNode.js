@@ -706,7 +706,7 @@ class SSRNode extends Node {
    * Uses {@link ImportanceSampledEnvironment} (CDF + MIS adapted from
    * [three-gpu-pathtracer](https://github.com/gkjohnson/three-gpu-pathtracer)).
    *
-   * @param {Texture|null} hdr - The equirectangular HDR environment map, or null to disable.
+   * @param {import('three').Texture|null} hdr - The equirectangular HDR environment map, or null to disable.
    * @see {@link https://github.com/gkjohnson/three-gpu-pathtracer}
    */
   setEnvMap(hdr) {

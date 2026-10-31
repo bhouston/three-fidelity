@@ -44,8 +44,8 @@ export interface RenderSession {
   pipeline: LivePipeline;
   beforeFrame?(frame: FrameContext): void;
   /** Completes all submitted work. Required for throughput and capture. */
-  complete(): Promise<void>;
-  dispose(): void;
+  complete: () => Promise<void>;
+  dispose: () => void;
 }
 
 export interface Statistics {

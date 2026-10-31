@@ -53,7 +53,7 @@ const x = Math.floor(chart.x + 3 + chart.innerW / 2),
   y = Math.floor(chart.y + 3 + chart.innerH / 2);
 const pixels = await renderer.readRenderTargetPixelsAsync(baker.display, x, y, 1, 1);
 const rgb = Array.from(pixels.slice(0, 3), DataUtils.fromHalfFloat);
-for (const channel of rgb) assert.ok(Math.abs(channel - Math.PI) < 0.15, `Expected irradiance π; got ${rgb}`);
+for (const channel of rgb) assert.ok(Math.abs(channel - Math.PI) < 0.15, `Expected irradiance π; got ${rgb.join(',')}`);
 // Replacing the emitters with a closed black enclosure must block every VPL.
 const originalGeometry = baker.atlas.entries.find((e) => e.mesh === receiver).originalGeometry;
 baker.dispose();
@@ -104,7 +104,7 @@ const blackPixels = await renderer.readRenderTargetPixelsAsync(
 const blockedRGB = Array.from(blackPixels.slice(0, 3), DataUtils.fromHalfFloat);
 assert.ok(
   blockedRGB.every((v) => v === 0),
-  `Opaque enclosure must block VPLs: ${blockedRGB}`,
+  `Opaque enclosure must block VPLs: ${blockedRGB.join(',')}`,
 );
 blocked.dispose();
 // Analytic concave transport: differential horizontal receiver beside a
@@ -136,7 +136,7 @@ const cornerPixels = await renderer.readRenderTargetPixelsAsync(corner.display, 
 const cornerRGB = Array.from(cornerPixels.slice(0, 3), DataUtils.fromHalfFloat);
 assert.ok(
   cornerRGB.every((v) => Math.abs(v - cornerExpected) < 0.12),
-  `Concave transport: expected ${cornerExpected}; got ${cornerRGB}`,
+  `Concave transport: expected ${cornerExpected}; got ${cornerRGB.join(',')}`,
 );
 corner.dispose();
 // Static point-light seed must retain physical inverse-square/cosine irradiance
@@ -159,7 +159,7 @@ const pointPixels = await renderer.readRenderTargetPixelsAsync(pointGI.direct, p
 const pointRGB = Array.from(pointPixels.slice(0, 3), DataUtils.fromHalfFloat);
 assert.ok(
   pointRGB.every((v) => Math.abs(v - pointExpected) < 0.002),
-  `Static point seed: expected ${pointExpected}; got ${pointRGB}`,
+  `Static point seed: expected ${pointExpected}; got ${pointRGB.join(',')}`,
 );
 pointGI.dispose();
 renderer.dispose();

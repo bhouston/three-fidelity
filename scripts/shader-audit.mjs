@@ -28,6 +28,7 @@ if (!out) throw new Error('Output directory required');
 await mkdir(out, { recursive: true });
 const modules = [];
 const pipelines = [];
+// oxlint-disable-next-line typescript/unbound-method -- patched prototype method, invoked via .call
 const originalModule = GPUDevice.prototype.createShaderModule;
 GPUDevice.prototype.createShaderModule = function (descriptor) {
   if (salt)
@@ -37,6 +38,7 @@ GPUDevice.prototype.createShaderModule = function (descriptor) {
   modules.push({ code: descriptor.code, label: descriptor.label ?? '', ms: performance.now() - start });
   return result;
 };
+// oxlint-disable-next-line typescript/unbound-method -- patched prototype method, invoked via .call
 const originalPipeline = GPUDevice.prototype.createRenderPipeline;
 GPUDevice.prototype.createRenderPipeline = function (descriptor) {
   const start = performance.now();

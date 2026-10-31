@@ -58,7 +58,7 @@ function convertOpacityToTransmission(model: Object3D, ior = 1.5): void {
     const material = mesh.material as Material;
     if (material.opacity >= 0.65 || material.opacity <= 0.2) continue;
     const next = new MeshPhysicalMaterial();
-    const target = next as unknown as Record<string, { copy?(v: unknown): void; constructor: unknown } | unknown>;
+    const target = next as unknown as Record<string, unknown>;
     for (const [key, value] of Object.entries(material)) {
       if (value === null || value === undefined || key.startsWith('_')) continue;
       if ((value as { isTexture?: boolean }).isTexture) target[key] = value;
