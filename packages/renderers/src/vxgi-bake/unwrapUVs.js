@@ -673,7 +673,7 @@ function solveLSCM(positions, triangles, initial) {
     const gx = [-1 / length, 1 / length, 0],
       gy = [(x - length) / (length * y), -x / (length * y), 1 / y];
     const indices = tri.flatMap((i) => [i * 2, i * 2 + 1]);
-    rows.push({ indices, values: gx.flatMap((value, i) => [value * weight, -gy[i] * weight]) });
+    rows.push({ indices, values: gx.flatMap((value, i) => [value * weight, -(gy[i] ?? 0) * weight]) });
     rows.push({ indices, values: gy.flatMap((value, i) => [value * weight, gx[i] * weight]) });
   }
 

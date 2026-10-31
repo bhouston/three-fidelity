@@ -31,11 +31,11 @@ it('dispatches independent SSR fixes without enabling another fix or changing th
     'background-depth',
     'back-depth',
   ] as const) {
-    createRenderer(`three-dev-ssr-${fix}`, canvas, setup, options);
+    void createRenderer(`three-dev-ssr-${fix}`, canvas, setup, options);
     expect(createDevSSRRenderer).toHaveBeenLastCalledWith(canvas, setup, options, fix);
   }
   for (const fix of ['baseline', 'normal-bias', 'ray-length'] as const) {
-    createRenderer(`three-dev-ssr-ggx-${fix}`, canvas, setup, options);
+    void createRenderer(`three-dev-ssr-ggx-${fix}`, canvas, setup, options);
     expect(createDevSSRRenderer).toHaveBeenLastCalledWith(canvas, setup, options, fix, true);
   }
   expect(createCurrentRenderer).not.toHaveBeenCalled();
@@ -47,9 +47,9 @@ it('dispatches each renderer name to its own pipeline without changing the scene
   const before = structuredClone(setup);
   const canvas = {} as HTMLCanvasElement;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new', canvas, setup, options);
-  createRenderer('three-current', canvas, setup, options);
-  createRenderer('vxgi', canvas, setup, options);
+  void createRenderer('three-new', canvas, setup, options);
+  void createRenderer('three-current', canvas, setup, options);
+  void createRenderer('vxgi', canvas, setup, options);
   expect(createVXGIRenderer).toHaveBeenCalledWith(canvas, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith(canvas, setup, options);
   // three-current is stock npm three.js r186, not a mode of the fork pipeline
@@ -59,22 +59,24 @@ it('dispatches each renderer name to its own pipeline without changing the scene
 });
 
 it('rejects the retired WebGPU path tracer before initializing a GPU', () => {
-  expect(() =>
-    createRenderer('three-gpu-pathtracer-webgpu' as RendererName, {} as HTMLCanvasElement, {} as SceneInstance, {
-      width: 1,
-      height: 1,
-    }),
+  expect(
+    () =>
+      void createRenderer('three-gpu-pathtracer-webgpu' as RendererName, {} as HTMLCanvasElement, {} as SceneInstance, {
+        width: 1,
+        height: 1,
+      }),
   ).toThrow('Unknown renderer');
   expect(createPathTracerRenderer).not.toHaveBeenCalled();
   expect(createThreeNewRenderer).not.toHaveBeenCalled();
 });
 
 it('rejects unknown renderer names rather than silently choosing a method', () => {
-  expect(() =>
-    createRenderer('unknown' as RendererName, {} as HTMLCanvasElement, {} as SceneInstance, {
-      width: 1,
-      height: 1,
-    }),
+  expect(
+    () =>
+      void createRenderer('unknown' as RendererName, {} as HTMLCanvasElement, {} as SceneInstance, {
+        width: 1,
+        height: 1,
+      }),
   ).toThrow('Unknown renderer');
   expect(createThreeNewRenderer).not.toHaveBeenCalled();
   expect(createPathTracerRenderer).not.toHaveBeenCalled();
@@ -86,17 +88,18 @@ it('rejects experiments on other renderers before initializing a GPU', () => {
     'require the three-new',
   );
   expect(createCurrentRenderer).not.toHaveBeenCalled();
-  createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, options);
+  void createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, {}, options);
 });
 
 it('rejects misspelled experiment names instead of quietly benchmarking the baseline', () => {
-  expect(() =>
-    createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, {
-      width: 640,
-      height: 480,
-      hierarchyExperiment: 'ssr-hzi-tight' as HierarchyExperiment,
-    }),
+  expect(
+    () =>
+      void createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, {
+        width: 640,
+        height: 480,
+        hierarchyExperiment: 'ssr-hzi-tight' as HierarchyExperiment,
+      }),
   ).toThrow('Unknown hierarchical experiment');
   expect(createThreeNewRenderer).not.toHaveBeenCalled();
 });
@@ -113,22 +116,24 @@ it('uses suite-compatible experiment image identifiers while preserving baseline
 
 // A misspelled or unsupported experiment must not silently produce baseline measurements.
 it('rejects SSR temporal profiles on other renderers before initializing a GPU', () => {
-  expect(() =>
-    createRenderer('three-current', {} as HTMLCanvasElement, {} as SceneInstance, {
-      width: 1,
-      height: 1,
-      ssrTemporalProfile: 'validated',
-    }),
+  expect(
+    () =>
+      void createRenderer('three-current', {} as HTMLCanvasElement, {} as SceneInstance, {
+        width: 1,
+        height: 1,
+        ssrTemporalProfile: 'validated',
+      }),
   ).toThrow('SSR temporal profiles require the three-new');
   expect(createCurrentRenderer).not.toHaveBeenCalled();
 });
 it('rejects unknown SSR temporal profiles before initializing a GPU', () => {
-  expect(() =>
-    createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, {
-      width: 1,
-      height: 1,
-      ssrTemporalProfile: 'validtaed' as import('./types.js').SSRTemporalProfile,
-    }),
+  expect(
+    () =>
+      void createRenderer('three-new', {} as HTMLCanvasElement, {} as SceneInstance, {
+        width: 1,
+        height: 1,
+        ssrTemporalProfile: 'validtaed' as import('./types.js').SSRTemporalProfile,
+      }),
   ).toThrow('Unknown SSR temporal profile');
   expect(createThreeNewRenderer).not.toHaveBeenCalled();
 });
@@ -136,35 +141,35 @@ it('rejects unknown SSR temporal profiles before initializing a GPU', () => {
 it('dispatches the basic probe renderer as a separately named pipeline', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new-light-probe', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('three-new-light-probe', {} as HTMLCanvasElement, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, setup, options, 'light-probe');
 });
 
 it('dispatches the DDGI extension without changing the basic probe mode', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new-light-probe-ddgi', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('three-new-light-probe-ddgi', {} as HTMLCanvasElement, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, setup, options, 'light-probe-ddgi');
 });
 
 it('dispatches progressive surface baking independently of probe lighting', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new-light-bake', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('three-new-light-bake', {} as HTMLCanvasElement, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, setup, options, 'light-bake');
 });
 
 it('dispatches surface VPL transport independently of baking and probes', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new-vpl', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('three-new-vpl', {} as HTMLCanvasElement, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, setup, options, 'vpl');
 });
 
 it('dispatches shadow-map VPL transport independently of the retained RIS baseline', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('three-new-vpl-shadow-maps', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('three-new-vpl-shadow-maps', {} as HTMLCanvasElement, setup, options);
   expect(createThreeNewRenderer).toHaveBeenCalledWith({}, setup, options, 'vpl-shadow-maps');
 });
 
@@ -181,7 +186,7 @@ it('rejects the retired VPL mirror and box-projected variants', () => {
 it('dispatches baked VXGI independently of live cone tracing', () => {
   const setup = { effects: {} } as SceneInstance;
   const options = { width: 640, height: 480 };
-  createRenderer('vxgi-light-bake', {} as HTMLCanvasElement, setup, options);
+  void createRenderer('vxgi-light-bake', {} as HTMLCanvasElement, setup, options);
   expect(createVXGILightBakeRenderer).toHaveBeenCalledWith({}, setup, options);
   expect(createVXGIRenderer).not.toHaveBeenCalled();
 });
@@ -201,7 +206,7 @@ it('dispatches each full-pipeline SSR ablation independently', () => {
     'additive-env',
     'capped-march',
   ] as const) {
-    createRenderer(`three-new-ssr-${contribution}`, canvas, setup, options);
+    void createRenderer(`three-new-ssr-${contribution}`, canvas, setup, options);
     expect(createThreeNewRenderer).toHaveBeenLastCalledWith(canvas, setup, options, undefined, contribution);
   }
   expect(createDevSSRRenderer).not.toHaveBeenCalled();

@@ -142,10 +142,12 @@ async function launch(headless, args) {
 
 async function adapterProbe() {
   console.log('\n# Adapter selection (headless)');
-  for (const [name, flags] of [
+  /** @type {[string, string[]][]} */
+  const cases = [
     ['default flags', []],
     ['Vulkan flags', vulkan],
-  ]) {
+  ];
+  for (const [name, flags] of cases) {
     const browser = await launch(true, [...base, ...flags]);
     const tab = await browser.newPage();
     await tab.goto('http://localhost:4499/blank');
@@ -170,6 +172,7 @@ async function adapterProbe() {
 
 async function backpressureProbe() {
   console.log('\n# Frame backpressure: rAF rate vs. GPU work left queued after 3 s');
+  /** @type {[string, boolean, string[]][]} */
   const cases = [
     ['headful,  vsync on', false, []],
     ['headless, vsync on', true, []],
@@ -208,14 +211,16 @@ async function backpressureProbe() {
 
 async function readbackProbe() {
   console.log('\n# canvas.toBlob() readback of a WebGPU canvas (expected gradient vs. decoded PNG)');
-  for (const [name, headless, flags] of [
+  /** @type {[string, boolean, string[]][]} */
+  const cases = [
     ['headful,  default flags', false, []],
     ['headful,  --use-angle=vulkan', false, ['--use-angle=vulkan']],
     ['headful,  --enable-features=Vulkan', false, ['--enable-features=Vulkan']],
     ['headful,  Vulkan flags', false, vulkan],
     ['headful,  Vulkan flags, --ozone-platform=x11', false, [...vulkan, '--ozone-platform=x11']],
     ['headless, Vulkan flags', true, vulkan],
-  ]) {
+  ];
+  for (const [name, headless, flags] of cases) {
     const browser = await launch(headless, [...base, ...flags]);
     try {
       const tab = await browser.newPage();

@@ -192,6 +192,7 @@ export function createNodeSceneContext(examplesDir = threeExamplesDir, assetsDir
       (globalThis as { DOMParser?: unknown }).DOMParser ??= DOMParser; // ColladaLoader parses XML
       const text = await readFile(file, 'utf8');
       const textures: Promise<void>[] = [];
+      // oxlint-disable-next-line typescript/unbound-method -- saved and restored below; never called unbound
       const originalLoad = TextureLoader.prototype.load;
       let scene;
       // ColladaLoader constructs its own TextureLoader. Substitute only during its synchronous parse,

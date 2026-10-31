@@ -52,7 +52,9 @@ export async function createPerformanceSession(
     host.replaceChildren(canvas);
     type AdapterInfo = { vendor?: string; architecture?: string; description?: string };
     const navigatorGPU = (
-      navigator as unknown as { gpu?: { requestAdapter(...args: unknown[]): Promise<{ info?: AdapterInfo } | null> } }
+      navigator as unknown as {
+        gpu?: { requestAdapter: (...args: unknown[]) => Promise<{ info?: AdapterInfo } | null> };
+      }
     ).gpu;
     const requestAdapter = navigatorGPU?.requestAdapter;
     let adapterInfo: AdapterInfo | undefined;

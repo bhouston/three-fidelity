@@ -52,7 +52,7 @@ export function geometrySnapshot(scene: Scene) {
   const bvh = new MeshBVH(geometry);
   const ray = new Ray();
   return {
-    trace(origin: Vector3, direction: Vector3, far: number) {
+    trace: (origin: Vector3, direction: Vector3, far: number) => {
       ray.origin.copy(origin);
       ray.direction.copy(direction);
       const hit = bvh.raycastFirst(ray, DoubleSide, 1e-6, far);

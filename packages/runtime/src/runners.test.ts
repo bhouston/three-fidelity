@@ -8,6 +8,10 @@ import type { BenchmarkRun, FrameContext, PipelineProfiler, RenderSession, Repor
 function fixture() {
   let time = 0;
   const frames: FrameContext[] = [];
+  const complete = vi.fn(async () => {
+    time += 4;
+  });
+  const dispose = vi.fn();
   const session: RenderSession = {
     pipeline: {
       render(frame) {
@@ -20,10 +24,8 @@ function fixture() {
     beforeFrame() {
       time += 1;
     },
-    complete: vi.fn(async () => {
-      time += 4;
-    }),
-    dispose: vi.fn(),
+    complete,
+    dispose,
   };
   const host = {
     now: () => time,
@@ -35,11 +37,11 @@ function fixture() {
       return time;
     }),
   };
-  return { session, frames, host };
+  return { session, frames, host, complete, dispose };
 }
 
 it('measures completed batches including GPU completion and preserves an exact partial final batch', async () => {
-  const { session, frames, host } = fixture();
+  const { session, frames, host, dispose } = fixture();
   const run = await benchmark(async () => session, { warmupFrames: 2, measureFrames: 7, batchSize: 3 }, host);
   expect(run.frames).toBe(7);
   expect(run.metrics.find((metric) => metric.descriptor.id === 'cpu.submit')?.statistics.mean).toBe(3);
@@ -48,7 +50,7 @@ it('measures completed batches including GPU completion and preserves an exact p
   expect(total.samples.map((sample) => sample.value)).toEqual([13 / 3, 13 / 3, 7]);
   expect(frames.map((frame) => frame.phase)).toEqual(['warmup', 'warmup', ...Array(7).fill('measure')]);
   expect(frames.at(-1)?.timeSeconds).toBe(8 / 60);
-  expect(session.dispose).toHaveBeenCalledOnce();
+  expect(dispose).toHaveBeenCalledOnce();
 });
 
 it('duration mode finishes a complete scripted cycle instead of sampling an arbitrary ending pose', async () => {
@@ -63,12 +65,12 @@ it('duration mode finishes a complete scripted cycle instead of sampling an arbi
 });
 
 it('cadence measures callback intervals and does not synchronize the GPU per measured frame', async () => {
-  const { session, host } = fixture();
+  const { session, host, complete } = fixture();
   const run = await benchmark(async () => session, { protocol: 'cadence', warmupFrames: 0, measureFrames: 3 }, host);
   expect(
     run.metrics.find((metric) => metric.descriptor.id === 'cadence.frame')?.samples.map((sample) => sample.value),
   ).toEqual([16, 19, 19]);
-  expect(session.complete).toHaveBeenCalledTimes(1);
+  expect(complete).toHaveBeenCalledTimes(1);
   expect(run.metrics.some((metric) => metric.descriptor.id === 'throughput.frame')).toBe(false);
 });
 
@@ -103,21 +105,21 @@ it('profiling records optional internal metrics and retains explicit unavailable
 });
 
 it('releases owned resources when rendering throws or cancellation arrives', async () => {
-  const { session, host } = fixture();
+  const { session, host, dispose } = fixture();
   session.pipeline.render = () => {
     throw new Error('device lost');
   };
   await expect(benchmark(async () => session, { warmupFrames: 0, measureFrames: 1 }, host)).rejects.toThrow(
     'device lost',
   );
-  expect(session.dispose).toHaveBeenCalledOnce();
+  expect(dispose).toHaveBeenCalledOnce();
   const next = fixture();
   const controller = new AbortController();
   next.session.beforeFrame = () => controller.abort(new Error('cancelled'));
   await expect(
     benchmark(async () => next.session, { warmupFrames: 0, measureFrames: 3 }, next.host, controller.signal),
   ).rejects.toThrow('cancelled');
-  expect(next.session.dispose).toHaveBeenCalledOnce();
+  expect(next.dispose).toHaveBeenCalledOnce();
 });
 
 it('rejects invalid protocols and incomplete exact motion budgets before allocating a GPU', async () => {
@@ -131,17 +133,17 @@ it('rejects invalid protocols and incomplete exact motion budgets before allocat
 });
 
 it('captures multiple logical frames, completes GPU work, and leaves session ownership with the caller', async () => {
-  const { session, frames, host } = fixture();
+  const { session, frames, host, complete, dispose } = fixture();
   const read = vi.fn(async () => 'pixels');
   await expect(capture(session, { frames: 3 }, read, host)).resolves.toBe('pixels');
   expect(frames.map((frame) => frame.phase)).toEqual(['capture', 'capture', 'capture']);
   expect(host.yield).toHaveBeenCalledTimes(2);
-  expect(session.complete).toHaveBeenCalledOnce();
-  expect(session.dispose).not.toHaveBeenCalled();
+  expect(complete).toHaveBeenCalledOnce();
+  expect(dispose).not.toHaveBeenCalled();
 });
 
 it('waits for accumulated samples through compilation and partial sampling before reading pixels', async () => {
-  const { session, host } = fixture();
+  const { session, host, complete } = fixture();
   let samples = 4;
   let calls = 0;
   session.pipeline.render = () => {
@@ -150,7 +152,7 @@ it('waits for accumulated samples through compilation and partial sampling befor
   };
   const read = vi.fn(async () => {
     expect(samples).toBe(7);
-    expect(session.complete).toHaveBeenCalledOnce();
+    expect(complete).toHaveBeenCalledOnce();
     return 'pixels';
   });
   await expect(capture(session, { frames: 3, accumulated: { count: () => samples } }, read, host)).resolves.toBe(
@@ -161,14 +163,14 @@ it('waits for accumulated samples through compilation and partial sampling befor
 });
 
 it('fails stalled sample captures without reading pixels and leaves cleanup to the caller', async () => {
-  const { session, host } = fixture();
+  const { session, host, complete, dispose } = fixture();
   const read = vi.fn();
   await expect(
     capture(session, { frames: 1, accumulated: { count: () => 0, stallTimeoutMs: 5 } }, read, host),
   ).rejects.toThrow('Capture stalled: accumulated 0 of 1 samples');
   expect(read).not.toHaveBeenCalled();
-  expect(session.complete).not.toHaveBeenCalled();
-  expect(session.dispose).not.toHaveBeenCalled();
+  expect(complete).not.toHaveBeenCalled();
+  expect(dispose).not.toHaveBeenCalled();
 });
 
 it('cancels sample captures during compilation without reading pixels', async () => {

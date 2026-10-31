@@ -267,7 +267,7 @@ for (const name of values.probe.split(',')) {
       }
     }
   }
-  console.log(`\n${name} (CPU, ${texelsUsed} texels x 64 rays): winding-toward-room ${probe.map(facing)}`);
+  console.log(`\n${name} (CPU, ${texelsUsed} texels x 64 rays): winding-toward-room ${probe.map(facing).join(', ')}`);
   for (const [key, h] of [...hist].sort((x, y) => y[1].n - x[1].n).slice(0, 8))
     console.log(`  ${key.padEnd(32)} share ${(h.n / rayCount).toFixed(3)} meanDist ${(h.dist / h.n).toFixed(4)}`);
 }

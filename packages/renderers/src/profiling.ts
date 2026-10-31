@@ -42,9 +42,11 @@ export function createWebGPUProfiler(renderer: TimestampRenderer): PipelineProfi
   let name = '';
   let invalidSamples = 0;
   const backend = renderer.backend;
+  /* oxlint-disable typescript/unbound-method -- patched and restored by reference; always invoked via .call(owner) */
   const originalUpdate = backend.updateTimeStampUID;
   const originalRender = renderer.render;
   const originalCompute = renderer.compute;
+  /* oxlint-enable typescript/unbound-method */
   backend.updateTimeStampUID = function (context) {
     originalUpdate.call(backend, context);
     const uid = backend.getTimestampUID(context);

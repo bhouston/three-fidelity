@@ -33,7 +33,7 @@ it('associates GPU query intervals with logical frames, sums repeated passes, an
   const renderer = {
     backend,
     hasFeature: () => true,
-    render(_scene: unknown, _camera: unknown) {
+    render: (_scene: unknown, _camera: unknown) => {
       backend.updateTimeStampUID();
       timestamps.set(uid, 2);
     },

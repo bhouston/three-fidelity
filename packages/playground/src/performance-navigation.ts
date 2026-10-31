@@ -10,7 +10,7 @@ export interface CameraPose {
 export interface NavigationOptions {
   /** Start from this pose instead of the scene's default camera. */
   initial?: CameraPose;
-  onChange?(pose: CameraPose): void;
+  onChange?: (pose: CameraPose) => void;
 }
 
 export function createNavigation(

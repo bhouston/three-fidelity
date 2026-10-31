@@ -278,10 +278,10 @@ for (const scene of scenes) {
         image: path.relative(out, imagePath),
       };
       row.quality[variant].passesReferenceGate = drop <= threshold;
-      for (const [comparisonName, comparison] of [
-        ['reference', againstReference],
-        ['baseline', againstBaseline],
-      ]) {
+      for (const [comparisonName, comparison] of Object.entries({
+        reference: againstReference,
+        baseline: againstBaseline,
+      })) {
         const { data, width: deltaWidth, height: deltaHeight } = comparison.delta;
         await sharp(data, { raw: { width: deltaWidth, height: deltaHeight, channels: 3 } })
           .png()

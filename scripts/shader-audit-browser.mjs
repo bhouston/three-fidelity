@@ -42,6 +42,7 @@ try {
         : null;
       const modules = [],
         pipelines = [];
+      // oxlint-disable-next-line typescript/unbound-method -- prototype patch; always invoked via .call(this, ...)
       const originalModule = GPUDevice.prototype.createShaderModule;
       GPUDevice.prototype.createShaderModule = function (descriptor) {
         if (shaderSalt)
@@ -54,6 +55,7 @@ try {
         modules.push({ label: descriptor.label, code: descriptor.code, ms: performance.now() - start });
         return result;
       };
+      // oxlint-disable-next-line typescript/unbound-method -- prototype patch; always invoked via .call(this, ...)
       const originalPipeline = GPUDevice.prototype.createRenderPipeline;
       GPUDevice.prototype.createRenderPipeline = function (descriptor) {
         const start = performance.now();

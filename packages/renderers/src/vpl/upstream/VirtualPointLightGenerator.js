@@ -37,7 +37,7 @@ class VirtualPointLightGenerator {
    * and compresses their flux into that same GPU budget. Misses retain their share of power.
    * `bounces` limits diffuse reflections; an emissive surface also contributes its own emission.
    * @param {Scene} scene
-   * @param {Array<PointLight|DirectionalLight>} lights
+   * @param {Array<import("three").PointLight|import("three").DirectionalLight>} lights
    * @param {Object} [options={}]
    * @param {number} [options.count=256] Maximum GPU emitter count.
    * @param {number} [options.seed=1] Reproducible random seed.

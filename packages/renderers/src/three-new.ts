@@ -392,7 +392,7 @@ export async function createThreeNewRenderer(
     baker?.dispose();
     releaseProbes?.();
     releaseScene();
-    renderer.dispose();
+    void renderer.dispose();
     throw error;
   }
   const progressive = (renderPipeline as AnyNode).progressiveTRAA;
@@ -483,7 +483,7 @@ export async function createThreeNewRenderer(
       baker?.dispose();
       releaseProbes?.();
       releaseScene();
-      renderer.dispose();
+      void renderer.dispose();
     },
   };
   handle.setSize(width, height);

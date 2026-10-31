@@ -53,7 +53,8 @@ const x = Math.floor(chart.x + 3 + chart.innerW / 2),
   y = Math.floor(chart.y + 3 + chart.innerH / 2);
 const pixels = await renderer.readRenderTargetPixelsAsync(baker.display, x, y, 1, 1);
 const rgb = Array.from(pixels.slice(0, 3), DataUtils.fromHalfFloat);
-for (const channel of rgb) assert.ok(Math.abs(channel - Math.PI) < 0.03, `Expected irradiance π; got ${rgb}`);
+for (const channel of rgb)
+  assert.ok(Math.abs(channel - Math.PI) < 0.03, `Expected irradiance π; got ${rgb.join(', ')}`);
 const originalGeometry = baker.atlas.entries.find((e) => e.mesh === receiver).originalGeometry;
 baker.dispose();
 assert.equal(receiver.geometry, originalGeometry);

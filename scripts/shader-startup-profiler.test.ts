@@ -117,11 +117,13 @@ function fixture() {
     }
   }
   const original = {
+    /* oxlint-disable typescript/unbound-method -- identity checks that prototype/instance hooks were restored */
     init: Renderer.prototype.init,
     shaderModule: Device.prototype.createShaderModule,
     pipeline: Device.prototype.createRenderPipeline,
     pipelineAsync: Device.prototype.createRenderPipelineAsync,
     queueDone: Queue.prototype.onSubmittedWorkDone,
+    /* oxlint-enable typescript/unbound-method */
   };
   const profiler = installShaderStartupProfiler({
     RendererClass: Renderer,
@@ -151,8 +153,10 @@ function fixture() {
 test('accounts actual builder phases, links source modules, snapshots pass names, and restores hooks', async () => {
   const f = fixture();
   const builder = new f.Builder();
+  /* oxlint-disable typescript/unbound-method -- identity checks that prototype/instance hooks were restored */
   const originalBuild = builder.build;
   const originalProgram = f.renderer.backend.createProgram;
+  /* oxlint-enable typescript/unbound-method */
   let callbacks = 0;
   const previous = () => {
     callbacks++;
@@ -194,6 +198,7 @@ test('accounts actual builder phases, links source modules, snapshots pass names
   } finally {
     f.profiler.restore();
   }
+  /* oxlint-disable typescript/unbound-method -- identity checks that prototype/instance hooks were restored */
   assert.equal(builder.build, originalBuild);
   assert.equal(f.renderer.backend.createProgram, originalProgram);
   assert.equal(f.renderer.debug.onNodeBuilderCreated, previous);
@@ -202,6 +207,7 @@ test('accounts actual builder phases, links source modules, snapshots pass names
   assert.equal(f.Device.prototype.createRenderPipeline, f.original.pipeline);
   assert.equal(f.Device.prototype.createRenderPipelineAsync, f.original.pipelineAsync);
   assert.equal(f.Queue.prototype.onSubmittedWorkDone, f.original.queueDone);
+  /* oxlint-enable typescript/unbound-method */
   f.profiler.restore();
 });
 
@@ -254,7 +260,7 @@ test('excludes explicit async builder yields and marks uninstrumented default sc
     assert.equal(first.yieldMs, 7);
     assert.equal(first.exclusiveMs.setup, 2);
     assert.equal(
-      Object.values(first.exclusiveMs).reduce((a: number, b: number) => a + b, 0),
+      (Object.values(first.exclusiveMs) as number[]).reduce((a, b) => a + b, 0),
       16,
     );
     assert.equal(report.builders[1].builds[0].defaultYieldIncluded, true);
