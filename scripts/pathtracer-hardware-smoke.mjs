@@ -27,7 +27,7 @@ await new Promise((done) => server.listen(0, '127.0.0.1', done));
 let browser;
 try {
   browser = await puppeteer.launch({
-    executablePath: process.env.CHROME_EXECUTABLE ?? puppeteer.executablePath(),
+    executablePath: process.env.CHROME_EXECUTABLE ?? (await puppeteer.executablePath()),
     headless: true,
     args: ['--no-sandbox', '--enable-unsafe-webgpu'],
   });

@@ -97,7 +97,7 @@ try {
     process.env.CHROME_EXECUTABLE ??
     (process.platform === 'darwin'
       ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-      : puppeteer.executablePath());
+      : await puppeteer.executablePath());
   browser = await puppeteer.launch({
     headless: !process.env.DISPLAY,
     dumpio: process.env.CI === 'true',
@@ -152,7 +152,7 @@ try {
   assert.ok(await page.$eval('figure img', (image) => image.naturalWidth > 0));
   assert.equal(
     await page.$$eval('h2', (elements) => elements.map((e) => e.textContent).join(',')),
-    'Fidelity,Performance,Live',
+    'Static fidelity,Performance,Live',
   );
   const hero = await page.$eval('figure a', (a) => a.href);
   await page.goto(hero, { waitUntil: 'networkidle0' });
