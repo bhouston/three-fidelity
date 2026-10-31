@@ -21,6 +21,7 @@ export default defineConfig({
     ],
   },
   test: {
+    fsModuleCache: true,
     include: ['packages/*/src/**/*.test.ts', 'packages/*/src/**/*.test.tsx', 'scripts/**/*.test.ts'],
     exclude: ['**/dist/**', '**/node_modules/**'],
     environment: 'node',
