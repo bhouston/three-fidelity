@@ -15,7 +15,7 @@ ENV BLENDER_EXECUTABLE=/opt/blender/blender FIDELITY_BLENDER_TIMEOUT_SECONDS=216
     HUSKY=0 CI=true
 WORKDIR /app
 COPY . .
-RUN npm install --global pnpm@11.0.8 \
+RUN npm install --global pnpm@12.16.1 \
     && pnpm install --frozen-lockfile && pnpm build \
     && node docker/scene-list.mjs > docker/scenes.json \
     && python3 docker/dockergrid.py --describe > /tmp/description.json \
