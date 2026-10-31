@@ -22,6 +22,8 @@ overrides:
   tinypool: '>=2.1.2'
   source-map-js: '>=1.2.2'
   basic-ftp: '>=6.2.1'
+  # one puppeteer 25.16+ (drops extract-zip, chromium-bidi on zod 4) across submodules, matching fidelity-kit
+  puppeteer: '^25.16.0'
   three: 'workspace:*'
   three-gpu-pathtracer: 'workspace:*'
   '@types/three': '^0.186.0'
