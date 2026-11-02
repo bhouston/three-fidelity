@@ -908,7 +908,7 @@ own note) is the working noise floor; a round is only kept if its speedup clears
 ## Round 5: lower march density for the second bounce only (kept)
 
 - **Candidate 1 (tried, reverted): half-resolution back-face depth pre-pass.** `SSRFastOptions.
-backDepthResolutionScale` (still wired, left unset) renders the dual-layer depth pass at half
+  backDepthResolutionScale` (still wired, left unset) renders the dual-layer depth pass at half
   resolution via `PassNode.setResolutionScale()`. It's a separate scene pass, not part of the march, so
   it looked like a safe way to avoid stacking more error onto `ssr-diag-metal-hit` (round 4's tight
   scene). It wasn't: mean regression **+1.90%** (over the 1% budget) and `ssr-diag-mirror` **+9.5%** (over

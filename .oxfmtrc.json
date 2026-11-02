@@ -2,12 +2,5 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "singleQuote": true,
   "printWidth": 120,
-  "ignorePatterns": [
-    "submodules/**",
-    "**/routeTree.gen.ts",
-    "fidelity-results/**",
-    "docs/history/performance/runsets/**",
-    "performance-results/**/raw.json",
-    "performance-results/**/metrics.json"
-  ]
+  "ignorePatterns": ["**/*.gen.ts"]
 }

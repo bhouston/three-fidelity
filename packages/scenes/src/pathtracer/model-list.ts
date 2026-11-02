@@ -343,25 +343,21 @@ const entries: ModelEntry[] = [
     'grey-and-white-room',
     'salle-de-bain',
     'white-room',
-  ].map(
-    (room): ModelEntry => ({
-      name: room,
-      file: `${DEMO}/bitterli-rendering-resources/${room}.glb`,
-      rotation: [0, 0, 0],
-      stage: 'none',
-      post: convertEmissivePlanesToLights,
-    }),
-  ),
-  ...['wooden-staircase', 'coffee-maker', 'little-lamp'].map(
-    (name): ModelEntry => ({
-      name,
-      file: `${DEMO}/bitterli-rendering-resources/${name}.glb`,
-      rotation: [0, 0, 0],
-      envMap: 'none',
-      stage: 'none',
-      post: convertEmissivePlanesToLights,
-    }),
-  ),
+  ].map((room): ModelEntry => ({
+    name: room,
+    file: `${DEMO}/bitterli-rendering-resources/${room}.glb`,
+    rotation: [0, 0, 0],
+    stage: 'none',
+    post: convertEmissivePlanesToLights,
+  })),
+  ...['wooden-staircase', 'coffee-maker', 'little-lamp'].map((name): ModelEntry => ({
+    name,
+    file: `${DEMO}/bitterli-rendering-resources/${name}.glb`,
+    rotation: [0, 0, 0],
+    envMap: 'none',
+    stage: 'none',
+    post: convertEmissivePlanesToLights,
+  })),
 
   { name: 'headphone-with-stand', file: `${DEMO}/devices/headphone-with-stand.glb` },
   { name: 'sony-playstation-2', file: `${DEMO}/devices/sony-playstation-2.glb` },
