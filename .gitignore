@@ -36,3 +36,8 @@ render-site/
 __pycache__/
 /docker/scenes.json
 /legacy-site/
+
+# Agent tooling
+.claude/
+.codex/
+.cursor/
